@@ -53,7 +53,7 @@ a{color:inherit}
 .clock{font-size:clamp(3rem,7vw,4.4rem);font-weight:200;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
 .greet{font-size:1.25rem;font-weight:600;margin-top:8px}
 .date{color:var(--muted)}
-.pdate{font-family:Vazirmatn,Tahoma,sans-serif;direction:rtl;unicode-bidi:isolate;font-size:.92rem;margin-left:6px}
+.pdate{font-family:Vazirmatn,Tahoma,sans-serif;unicode-bidi:isolate;font-size:.92rem}
 .lines{margin-top:10px;display:flex;flex-direction:column;gap:3px;font-size:.93rem;color:var(--muted)}
 .lines b{color:var(--ink);font-weight:600}
 .lines .now b{color:var(--accent)}
@@ -80,6 +80,13 @@ a{color:inherit}
 .search input{width:100%;height:46px;padding:0 16px 0 44px;border:1px solid var(--line);border-radius:12px;background:var(--card);outline:none;font-size:1rem}
 .search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
 .search .mag{position:absolute;left:16px;top:50%;transform:translateY(-50%);opacity:.45;pointer-events:none}
+.art{max-width:640px;margin:10px auto 0;padding:0 4px;font-size:1.05rem;min-height:0}
+.art:empty{display:none}
+.art .g{font-weight:700}
+.art .g-m{color:#2f6fd1}.art .g-f{color:#c2255c}.art .g-n{color:#2b8a3e}
+@media (prefers-color-scheme: dark){.art .g-m{color:#7fa8ff}.art .g-f{color:#ff7aa5}.art .g-n{color:#6fd18a}}
+.art small{color:var(--muted);font-size:.86rem}
+.art a{color:var(--muted);font-size:.86rem;margin-left:6px}
 .recent{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:12px auto 0;max-width:760px}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;border:1px solid var(--line);text-decoration:none;font-size:.86rem;max-width:220px}
 .chip:hover{background:var(--card)}
@@ -112,7 +119,7 @@ body.edit .qadd{display:block}
 /* Karten */
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px 12px}
-.duo .card{min-height:170px}
+.duo .card{min-height:170px;min-width:0}
 
 /* Termine */
 .evlist{list-style:none;margin:0;padding:0}
@@ -148,6 +155,22 @@ body.edit .qadd{display:block}
 .note{width:100%;min-height:200px;border:0;background:transparent;resize:vertical;outline:none;padding:4px;line-height:1.5}
 .clr{border:0;background:none;color:var(--muted);font-size:.82rem;cursor:pointer;padding:4px}
 .clr:hover{color:var(--ink)}
+
+/* Regenradar */
+.radar{padding:0;overflow:hidden;position:relative}
+#rdMap{height:340px;background:var(--hover)}
+.rdbar{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid var(--line)}
+.rdbar input[type=range]{flex:1;accent-color:var(--accent)}
+.rdt{font-size:.86rem;color:var(--muted);min-width:118px;text-align:right;font-variant-numeric:tabular-nums}
+.rdt b{color:var(--ink);font-weight:600}
+.leaflet-container{font:inherit;background:var(--hover)}
+.leaflet-control-attribution{font-size:10px!important}
+.leaflet-bar{border:1px solid var(--line)!important;box-shadow:none!important;border-radius:9px!important;overflow:hidden}
+.leaflet-bar a{background:var(--card)!important;color:var(--muted)!important;width:28px!important;height:28px!important;line-height:28px!important;font-size:16px!important;border-bottom-color:var(--line)!important}
+.leaflet-bar a:hover{color:var(--ink)!important}
+.leaflet-control-attribution{background:color-mix(in srgb,var(--card) 80%,transparent)!important;color:var(--muted)!important}
+.leaflet-control-attribution a{color:var(--muted)!important}
+.wrain{font-size:.86rem;margin-top:6px}
 
 /* Ordner */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;align-items:start}
@@ -252,6 +275,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   .duo{grid-template-columns:1fr}
 }
 @media (max-width:560px){
+  #rdMap{height:300px}
   .grid{grid-template-columns:1fr}
   .quick{grid-template-columns:repeat(3,1fr);gap:8px}
   .toggles{grid-template-columns:1fr}
@@ -308,7 +332,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     <div>
       <div class="clock" id="clock">--:--</div>
       <div class="greet" id="greet"></div>
-      <div class="date"><span id="date"></span><span class="pdate" id="pdate" lang="fa"></span></div>
+      <div class="date"><span id="date"></span><span id="psep" class="pdsep"></span><span class="pdate" id="pdate" lang="fa" dir="rtl"></span></div>
       <div class="lines" id="lines"></div>
     </div>
     <div class="weather" id="weather"><div class="w-msg">Wetter wird geladen …</div></div>
@@ -316,8 +340,9 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 
   <div class="search">
     <span class="mag">🔍</span>
-    <input id="q" type="search" placeholder="Suchen – ohne Treffer sucht Enter im Web" autocomplete="off">
+    <input id="q" type="search" placeholder="Links suchen oder Wort eingeben (Artikel) …" autocomplete="off">
   </div>
+  <div class="art" id="art" aria-live="polite"></div>
   <div class="recent" id="recent"></div>
 
   <div class="notice" id="editNotice" hidden>Bearbeiten: Links anklicken zum Ändern. Fertig? Oben ✓ – und bei Gelegenheit ⋯ → Exportieren.</div>
@@ -348,12 +373,24 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     </div>
   </div>
 
+  <div id="radarWrap">
+    <div class="h2"><b>Regenradar</b><button class="ib" type="button" id="rdBig" title="Größer / kleiner">⤢</button></div>
+    <div class="card radar">
+      <div id="rdMap"></div>
+      <div class="rdbar">
+        <button class="ib" type="button" id="rdPlay" title="Abspielen">▶</button>
+        <input type="range" id="rdRange" min="0" max="12" value="4" aria-label="Zeitpunkt">
+        <span class="rdt" id="rdTime">–</span>
+      </div>
+    </div>
+  </div>
+
   <div id="appsWrap">
     <div class="h2"><b>Anwendungen</b></div>
     <div class="grid" id="grid"></div>
   </div>
 
-  <footer id="foot">Wetter: Open-Meteo</footer>
+  <footer id="foot">Wetter: Open-Meteo · Radar: Deutscher Wetterdienst</footer>
 </div>
 
 <!-- Link -->
@@ -520,9 +557,9 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   var SWATCH = ["#2f4fd1","#0f8a6b","#d08a12","#7b3fa0","#c2255c","#e8590c","#1098ad","#2b8a3e","#64748b"];
   var DAYS = ["Mo","Di","Mi","Do","Fr","Sa","So"];
   var VIEW = [
-    ["weather","Wetter"], ["events","Termine"], ["notes","Notizen & To-dos"], ["quick","Schnellzugriff"],
+    ["weather","Wetter"], ["radar","Regenradar"], ["events","Termine"], ["notes","Notizen & To-dos"], ["quick","Schnellzugriff"],
     ["apps","Anwendungen"], ["recent","Zuletzt geöffnet"], ["week","Wochenplan (oben)"], ["holidays","Feiertage SH"],
-    ["pdate","Persisches Datum"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["keys","Tastenkürzel 1–9"]
+    ["pdate","Persisches Datum"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["keys","Tastenkürzel 1–9"], ["articles","Artikel in der Suche"]
   ];
 
   var data = null, editMode = false, query = "", sessionPw = null;
@@ -690,7 +727,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     var g = h < 5 ? "Gute Nacht" : h < 11 ? "Guten Morgen" : h < 14 ? "Guten Mittag" : h < 18 ? "Guten Tag" : h < 22 ? "Guten Abend" : "Gute Nacht";
     if (!data) return;
     $("greet").textContent = g + (data.name ? ", " + data.name : "");
-    $("pdate").textContent = on("pdate") && pfmt ? " · " + pfmt.format(n) : "";
+    var showP = on("pdate") && pfmt; $("pdate").textContent = showP ? pfmt.format(n) : ""; $("psep").textContent = showP ? " · " : "";
     renderLines();
   }
   function renderLines(){
@@ -732,7 +769,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     if (!force) { try { var c = JSON.parse(ls(WX_KEY)); if (c && c.k === key && Date.now() - c.t < 20 * 60000) { drawWeather(c.d); return; } } catch(e){} }
     var url = "https://api.open-meteo.com/v1/forecast?latitude=" + w.lat + "&longitude=" + w.lon +
       "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,is_day" +
-      "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&timezone=auto&forecast_days=5";
+      "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&minutely_15=precipitation&forecast_minutely_15=12&timezone=auto&forecast_days=5";
     fetch(url).then(function(r){ if (!r.ok) throw 0; return r.json(); }).then(function(d){ ls(WX_KEY, JSON.stringify({k:key, t:Date.now(), d:d})); drawWeather(d); })
       .catch(function(){ $("weather").innerHTML = wTop() + '<div class="w-msg">Wetter gerade nicht erreichbar.</div>'; });
   }
@@ -747,7 +784,24 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       '<div class="w-main"><div class="w-ico">' + info[1] + '</div><div class="w-temp">' + Math.round(cur.temperature_2m) + '°</div></div>' +
       '<div class="w-desc">' + info[0] + ' · gefühlt ' + Math.round(cur.apparent_temperature) + '°</div>' +
       '<div class="w-meta">' + Math.round(dl.temperature_2m_max[0]) + '° / ' + Math.round(dl.temperature_2m_min[0]) + '° · Regen ' + (dl.precipitation_probability_max[0] || 0) + ' % · Wind ' + Math.round(cur.wind_speed_10m) + ' km/h<br>Sonne ' + t5(dl.sunrise[0]) + '–' + t5(dl.sunset[0]) + '</div>' +
-      '<div class="w-days">' + days + '</div>';
+      rainLine(d) + '<div class="w-days">' + days + '</div>';
+  }
+  function rainLine(d){
+    var m = d.minutely_15; if (!m || !m.time || !d.current || !d.current.time) return "";
+    var now = d.current.time, idx = [];
+    for (var i = 0; i < m.time.length; i++) if (m.time[i] >= now.slice(0, 14) + p2(Math.floor(+now.slice(14, 16) / 15) * 15)) idx.push(i);
+    idx = idx.slice(0, 9);
+    if (!idx.length) return "";
+    var wet = function(i){ return (m.precipitation[i] || 0) >= 0.1; }, t = function(i){ return m.time[i].slice(11, 16); };
+    var txt;
+    if (wet(idx[0])) {
+      var dry = idx.filter(function(i){ return !wet(i); })[0];
+      txt = dry != null ? "🌧 Regen – voraussichtlich bis " + t(dry) : "🌧 Regen in den nächsten 2 Std.";
+    } else {
+      var first = idx.filter(wet)[0];
+      txt = first != null ? "☂ Regen ab etwa " + t(first) : "Kein Regen in den nächsten 2 Std.";
+    }
+    return '<div class="wrain">' + txt + '</div>';
   }
   function setCity(){
     var name = prompt("Ort für das Wetter:", data.weather.name);
@@ -755,13 +809,13 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     fetch("https://geocoding-api.open-meteo.com/v1/search?count=1&language=de&name=" + encodeURIComponent(name.trim())).then(function(r){ return r.json(); }).then(function(g){
       var p = g && g.results && g.results[0];
       if (!p) { toast("Ort nicht gefunden"); return; }
-      data.weather = {name:p.name, lat:p.latitude, lon:p.longitude}; save(); loadWeather(true);
+      data.weather = {name:p.name, lat:p.latitude, lon:p.longitude}; save(); loadWeather(true); rdCenter();
     }).catch(function(){ toast("Ortssuche nicht erreichbar"); });
   }
   function useGeo(){
     if (!navigator.geolocation) { toast("Standort nicht verfügbar"); return; }
     navigator.geolocation.getCurrentPosition(function(pos){
-      data.weather = {name:"Mein Standort", lat:+pos.coords.latitude.toFixed(4), lon:+pos.coords.longitude.toFixed(4)}; save(); loadWeather(true);
+      data.weather = {name:"Mein Standort", lat:+pos.coords.latitude.toFixed(4), lon:+pos.coords.longitude.toFixed(4)}; save(); loadWeather(true); rdCenter();
     }, function(){ toast("Standort nicht freigegeben"); }, {timeout:10000});
   }
   $("weather").addEventListener("click", function(e){
@@ -770,6 +824,135 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     if (b.dataset.w === "city") setCity();
     if (b.dataset.w === "geo") useGeo();
   });
+
+  /* ================= Regenradar (DWD) ================= */
+  var leafletP = null, rd = null;
+  function loadLeaflet(){
+    if (window.L) return Promise.resolve();
+    if (leafletP) return leafletP;
+    leafletP = new Promise(function(res, rej){
+      var c = document.createElement("link"); c.rel = "stylesheet"; c.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"; document.head.appendChild(c);
+      var s = document.createElement("script"); s.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
+      s.onload = res; s.onerror = function(){ leafletP = null; rej(); }; document.head.appendChild(s);
+    });
+    return leafletP;
+  }
+  var RD_STEP = 15, RD_PAST = 4, RD_FUT = 8;
+  function rdFrames(){
+    var base = Math.floor((Date.now() - 6 * 60000) / 300000) * 300000, out = [];
+    for (var k = -RD_PAST; k <= RD_FUT; k++) out.push(new Date(base + k * RD_STEP * 60000));
+    return out;
+  }
+  function dark(){ return window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches; }
+  function initRadar(){
+    if (!on("radar")) return;
+    if (rd) { rdCenter(); return; }
+    loadLeaflet().then(function(){
+      if (rd) return;
+      var L = window.L, w = data.weather;
+      var map = L.map("rdMap", {zoomControl:false, attributionControl:true, scrollWheelZoom:false, minZoom:5, maxZoom:11}).setView([w.lat, w.lon], 8);
+      L.control.zoom({position:"topright"}).addTo(map);
+      map.attributionControl.setPrefix(false);
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/" + (dark() ? "dark_all" : "light_all") + "/{z}/{x}/{y}{r}.png",
+        {subdomains:"abcd", maxZoom:19, attribution:"© OpenStreetMap, © CARTO"}).addTo(map);
+      map.on("focus", function(){ map.scrollWheelZoom.enable(); });
+      map.on("blur", function(){ map.scrollWheelZoom.disable(); });
+      var marker = L.circleMarker([w.lat, w.lon], {radius:5, color:"#fff", weight:2, fillColor:"#2f4fd1", fillOpacity:1}).addTo(map);
+      rd = {map:map, marker:marker, frames:[], layers:[], cur:-1, timer:null, stamp:0};
+      rdBuild();
+      setInterval(function(){ if (!rd.timer && Date.now() - rd.stamp > 5 * 60000) rdBuild(); }, 60000);
+    }).catch(function(){ $("rdMap").innerHTML = '<div class="muted" style="padding:20px">Karte konnte nicht geladen werden.</div>'; });
+  }
+  function rdBuild(){
+    var L = window.L;
+    rd.layers.forEach(function(l){ rd.map.removeLayer(l); });
+    rd.frames = rdFrames(); rd.stamp = Date.now();
+    rd.layers = rd.frames.map(function(t){
+      return L.tileLayer.wms("https://maps.dwd.de/geoserver/dwd/wms", {
+        layers:"dwd:Niederschlagsradar", format:"image/png", transparent:true, version:"1.3.0",
+        time:t.toISOString().replace(/\.\d{3}Z$/, ".000Z"), opacity:0, attribution:"Radar: © Deutscher Wetterdienst", tileSize:512, zIndex:5
+      }).addTo(rd.map);
+    });
+    $("rdRange").max = rd.frames.length - 1;
+    rdShow(RD_PAST);
+  }
+  function rdShow(i){
+    if (!rd || !rd.layers.length) return;
+    rd.layers.forEach(function(l, k){ l.setOpacity(k === i ? 0.75 : 0); });
+    rd.cur = i; $("rdRange").value = i;
+    var t = rd.frames[i], diff = Math.round((t - rd.frames[RD_PAST]) / 60000);
+    var lbl = diff === 0 ? "jetzt" : (diff > 0 ? "+" : "−") + Math.abs(diff) + " Min";
+    $("rdTime").innerHTML = "<b>" + hm(t) + "</b> · " + lbl + (diff > 0 ? " (Prognose)" : "");
+  }
+  function rdCenter(){ if (rd) { rd.map.setView([data.weather.lat, data.weather.lon], rd.map.getZoom()); rd.marker.setLatLng([data.weather.lat, data.weather.lon]); } }
+  function rdStop(){ if (rd && rd.timer) { clearInterval(rd.timer); rd.timer = null; } $("rdPlay").textContent = "▶"; }
+  $("rdPlay").addEventListener("click", function(){
+    if (!rd) return;
+    if (rd.timer) { rdStop(); return; }
+    if (Date.now() - rd.stamp > 5 * 60000) rdBuild();
+    $("rdPlay").textContent = "❚❚";
+    rd.timer = setInterval(function(){ rdShow((rd.cur + 1) % rd.frames.length); }, 700);
+  });
+  $("rdRange").addEventListener("input", function(e){ rdStop(); rdShow(+e.target.value); });
+  $("rdBig").addEventListener("click", function(){
+    var m = $("rdMap"); m.style.height = m.style.height ? "" : "70vh";
+    if (rd) setTimeout(function(){ rd.map.invalidateSize(); }, 50);
+  });
+
+  /* ================= Artikel nachschlagen (Wiktionary) ================= */
+  var ART = {m:"der", f:"die", n:"das"}, artCache = {}, artT = null, artSeq = 0;
+  function cap(w){ return w.charAt(0).toUpperCase() + w.slice(1); }
+  function parseNoun(text){
+    if (!text) return null;
+    var m = text.match(/\{\{Deutsch Substantiv Übersicht[^\n]*\n([\s\S]*?)\n\}\}/);
+    if (!m) return null;
+    var body = m[1], gen = [], pl = null, g, re = /\|\s*Genus(?:\s*\d)?\s*=\s*([a-z0])/g;
+    while ((g = re.exec(body))) if (gen.indexOf(g[1]) === -1) gen.push(g[1]);
+    var pm = body.match(/\|\s*Nominativ Plural(?:\s*\d)?\s*=\s*([^\n|]*)/);
+    if (pm) { pl = pm[1].trim(); if (!pl || /^[—–-]$/.test(pl)) pl = null; }
+    gen = gen.filter(function(x){ return ART[x]; });
+    if (!gen.length && !pl) return null;
+    return {gen:gen, pl:pl};
+  }
+  function artFetch(word){
+    var cands = [cap(word)];
+    for (var i = 1; i <= word.length - 3 && cands.length < 45; i++) cands.push(cap(word.slice(i)));
+    var url = "https://de.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&formatversion=2&redirects=1&origin=*&titles=" +
+      cands.map(encodeURIComponent).join("|");
+    return fetch(url).then(function(r){ if (!r.ok) throw 0; return r.json(); }).then(function(j){
+      var pages = (j.query && j.query.pages) || [], byTitle = {};
+      pages.forEach(function(p){ if (!p.missing && p.revisions) byTitle[p.title] = p.revisions[0].slots ? p.revisions[0].slots.main.content : p.revisions[0].content; });
+      (j.query && j.query.redirects || []).forEach(function(r){ if (byTitle[r.to] && !byTitle[r.from]) byTitle[r.from] = byTitle[r.to]; });
+      (j.query && j.query.normalized || []).forEach(function(r){ if (byTitle[r.to] && !byTitle[r.from]) byTitle[r.from] = byTitle[r.to]; });
+      for (var k = 0; k < cands.length; k++) {
+        var info = parseNoun(byTitle[cands[k]]);
+        if (info) { info.base = cands[k]; info.word = cap(word); info.prefix = k === 0 ? "" : cap(word).slice(0, cap(word).length - cands[k].length); return info; }
+      }
+      return null;
+    });
+  }
+  function artRender(info, word){
+    if (!info) { $("art").innerHTML = '<small>Kein Nomen „' + esc(cap(word)) + '“ gefunden.</small> <a href="https://www.dwds.de/?q=' + encodeURIComponent(word) + '" target="_blank" rel="noopener">DWDS ↗</a>'; return; }
+    var w = info.word, arts = info.gen.map(function(g){ return '<span class="g g-' + g + '">' + ART[g] + '</span>'; }).join(" / ");
+    var plural = info.pl ? (info.prefix ? info.prefix + info.pl.charAt(0).toLowerCase() + info.pl.slice(1) : info.pl) : null;
+    var h = (arts ? arts + " " : "") + '<b>' + esc(w) + '</b>';
+    if (!info.gen.length && plural) h = '<span class="g g-f">die</span> <b>' + esc(plural) + '</b> <small>(nur Plural)</small>';
+    else h += plural ? ' <small>· Pl.</small> die ' + esc(plural) : ' <small>· kein Plural</small>';
+    if (info.prefix) h += ' <small>· nach „' + esc(info.base) + '“</small>';
+    h += '<a href="https://de.wiktionary.org/wiki/' + encodeURIComponent(info.base) + '" target="_blank" rel="noopener">Wiktionary ↗</a>';
+    $("art").innerHTML = h;
+  }
+  function artLookup(q){
+    clearTimeout(artT);
+    var w = String(q || "").trim().replace(/^(der|die|das)\s+/i, "");
+    if (!on("articles") || editMode || !/^[A-Za-zÄÖÜäöüß-]{2,40}$/.test(w)) { $("art").innerHTML = ""; return; }
+    var key = w.toLowerCase(), seq = ++artSeq;
+    if (artCache[key] !== undefined) { artRender(artCache[key], w); return; }
+    artT = setTimeout(function(){
+      artFetch(w).then(function(info){ artCache[key] = info; if (seq === artSeq) artRender(info, w); })
+        .catch(function(){ if (seq === artSeq) $("art").innerHTML = '<small>Wörterbuch gerade nicht erreichbar.</small>'; });
+    }, 350);
+  }
 
   /* ================= Rendern ================= */
   function matches(l, extra){ return (l.title + " " + l.url + " " + l.note + " " + (extra || "")).toLowerCase().indexOf(query.toLowerCase()) !== -1; }
@@ -793,6 +976,8 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     $("pwMenu").textContent = hasPw() ? "Passwort ändern" : "Passwort festlegen";
     $("pwOffMenu").classList.toggle("hide", !hasPw());
     $("weather").classList.toggle("hide", !on("weather"));
+    $("radarWrap").classList.toggle("hide", !on("radar") || (!!query && !editMode));
+    if (on("radar")) initRadar(); else rdStop();
     tick(); renderRecent(); renderEvents(); renderNotes(); showDirty();
 
     var searching = !!query && !editMode;
@@ -822,7 +1007,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
         if (!links.length) return;
       }
       shown++;
-      html += '<section class="sec" style="--c:' + esc(s.color) + '"><div class="sec-h"><span class="sec-dot"></span><span>' + esc(s.icon) + '</span><div class="sec-t">' + esc(s.name) + '</div>' +
+      html += '<section class="sec" style="--c:' + esc(s.color) + '"><div class="sec-h"><span>' + esc(s.icon) + '</span><div class="sec-t">' + esc(s.name) + '</div>' +
         '<div class="ed"><button class="ib" data-a="secUp" data-s="' + si + '" title="Nach vorne">‹</button><button class="ib" data-a="secDown" data-s="' + si + '" title="Nach hinten">›</button><button class="ib" data-a="secEdit" data-s="' + si + '" title="Bearbeiten">✎</button><button class="ib" data-a="secDel" data-s="' + si + '" title="Löschen">✕</button></div></div><ul class="links">';
       if (!links.length) html += '<li class="empty">Noch leer</li>';
       links.forEach(function(l){
@@ -836,7 +1021,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       html += '</ul><button class="addlink" data-a="lAdd" data-s="' + si + '">＋ Link</button></section>';
     });
     html += '<button class="addsec" data-a="secAdd">＋ Ordner</button>';
-    if (searching && !shown) html = qShown ? "" : '<div class="nores" style="grid-column:1/-1">Nichts gefunden – Enter sucht „' + esc(query) + '“ im Web.</div>';
+    if (searching && !shown) html = (qShown || on("articles")) ? "" : '<div class="nores" style="grid-column:1/-1">Nichts gefunden – Enter sucht „' + esc(query) + '“ im Web.</div>';
     $("grid").innerHTML = html;
     $("appsWrap").classList.toggle("hide", !on("apps") || (searching && !shown && qShown > 0));
   }
@@ -1240,13 +1425,13 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 
   /* ================= Suche, Tasten, Menü ================= */
   $("editBtn").addEventListener("click", function(){ editMode = !editMode; render(); });
-  $("q").addEventListener("input", function(e){ query = e.target.value.trim(); render(); });
+  $("q").addEventListener("input", function(e){ query = e.target.value.trim(); render(); artLookup(query); });
   $("q").addEventListener("keydown", function(e){
     if (e.key === "Enter" && query) {
       var first = document.querySelector("#quick a[data-l], #grid a[data-l]");
       if (first && !editMode) first.click(); else if (!first) location.href = "https://www.google.com/search?q=" + encodeURIComponent(query);
     }
-    if (e.key === "Escape") { e.target.value = ""; query = ""; render(); e.target.blur(); }
+    if (e.key === "Escape") { e.target.value = ""; query = ""; render(); artLookup(""); e.target.blur(); }
   });
   document.addEventListener("keydown", function(e){
     if (document.body.classList.contains("locked") || document.querySelector("dialog[open]") || isTyping() || e.ctrlKey || e.metaKey || e.altKey) return;
