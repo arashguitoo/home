@@ -49,7 +49,7 @@ a{color:inherit}
 .dotwarn{position:relative}
 .dotwarn::after{content:"";position:absolute;top:5px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--warm)}
 
-.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:30px 0 26px;border-bottom:1px solid var(--line)}
+.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:26px 0 24px;border-bottom:1px solid var(--line)}
 .clock{font-size:clamp(3rem,7vw,4.4rem);font-weight:200;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
 .greet{font-size:1.25rem;font-weight:600;margin-top:8px}
 .date{color:var(--muted)}
@@ -101,11 +101,12 @@ a{color:inherit}
 .card .h2{margin:0 0 6px}
 
 /* Schnellzugriff */
-.quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
-.qt{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 10px;border-radius:14px;text-decoration:none;background:var(--card);border:1px solid var(--line);transition:box-shadow .15s}
+#quickWrap{margin-top:16px}
+.quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.qt{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:11px 6px 8px;border-radius:14px;text-decoration:none;background:var(--card);border:1px solid var(--line);transition:box-shadow .15s}
 .qt:hover{box-shadow:var(--pop)}
-.qi{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:1.25rem;background:var(--hover);overflow:hidden}
-.qi img{width:24px;height:24px}
+.qi{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:1.25rem;background:var(--hover);overflow:hidden}
+.qi img{width:20px;height:20px}
 .qi.letter{font-weight:700;font-size:1.1rem;color:#fff}
 .qn{font-size:.85rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .qk{position:absolute;top:6px;left:8px;font-size:.68rem;color:var(--muted);opacity:0;transition:opacity .15s}
@@ -113,7 +114,7 @@ body.keys .qt:hover .qk{opacity:1}
 .qed{display:none;position:absolute;top:2px;right:2px}
 .qed .ib{min-width:24px;height:24px;font-size:.78rem}
 body.edit .qed{display:flex}
-.qadd{display:none;border:1px dashed var(--line);border-radius:14px;background:transparent;cursor:pointer;color:var(--muted);min-height:96px}
+.qadd{display:none;border:1px dashed var(--line);border-radius:14px;background:transparent;cursor:pointer;color:var(--muted);min-height:80px}
 body.edit .qadd{display:block}
 
 /* Karten */
@@ -156,20 +157,10 @@ body.edit .qadd{display:block}
 .clr{border:0;background:none;color:var(--muted);font-size:.82rem;cursor:pointer;padding:4px}
 .clr:hover{color:var(--ink)}
 
-/* Regenradar */
-.radar{padding:0;overflow:hidden;position:relative}
-#rdMap{height:340px;background:var(--hover)}
-.rdbar{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid var(--line)}
-.rdbar input[type=range]{flex:1;accent-color:var(--accent)}
-.rdt{font-size:.86rem;color:var(--muted);min-width:118px;text-align:right;font-variant-numeric:tabular-nums}
-.rdt b{color:var(--ink);font-weight:600}
-.leaflet-container{font:inherit;background:var(--hover)}
-.leaflet-control-attribution{font-size:10px!important}
-.leaflet-bar{border:1px solid var(--line)!important;box-shadow:none!important;border-radius:9px!important;overflow:hidden}
-.leaflet-bar a{background:var(--card)!important;color:var(--muted)!important;width:28px!important;height:28px!important;line-height:28px!important;font-size:16px!important;border-bottom-color:var(--line)!important}
-.leaflet-bar a:hover{color:var(--ink)!important}
-.leaflet-control-attribution{background:color-mix(in srgb,var(--card) 80%,transparent)!important;color:var(--muted)!important}
-.leaflet-control-attribution a{color:var(--muted)!important}
+.rbar{display:flex;align-items:flex-end;gap:3px;height:34px;margin-top:8px}
+.rbar i{flex:1;background:var(--accent);border-radius:3px 3px 1px 1px;min-height:2px;opacity:.25}
+.rbar i.wet{opacity:.85}
+.rlbl{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);margin-top:3px}
 .wrain{font-size:.86rem;margin-top:6px}
 
 /* Ordner */
@@ -275,7 +266,6 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   .duo{grid-template-columns:1fr}
 }
 @media (max-width:560px){
-  #rdMap{height:300px}
   .grid{grid-template-columns:1fr}
   .quick{grid-template-columns:repeat(3,1fr);gap:8px}
   .toggles{grid-template-columns:1fr}
@@ -328,6 +318,10 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     </div>
   </div>
 
+  <div id="quickWrap">
+    <div class="quick" id="quick"></div>
+  </div>
+
   <section class="hero">
     <div>
       <div class="clock" id="clock">--:--</div>
@@ -346,11 +340,6 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   <div class="recent" id="recent"></div>
 
   <div class="notice" id="editNotice" hidden>Bearbeiten: Links anklicken zum Ändern. Fertig? Oben ✓ – und bei Gelegenheit ⋯ → Exportieren.</div>
-
-  <div id="quickWrap">
-    <div class="h2"><b>Schnellzugriff</b></div>
-    <div class="quick" id="quick"></div>
-  </div>
 
   <div class="duo" id="duo">
     <div class="card" id="evWrap">
@@ -373,24 +362,12 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     </div>
   </div>
 
-  <div id="radarWrap">
-    <div class="h2"><b>Regenradar</b><button class="ib" type="button" id="rdBig" title="Größer / kleiner">⤢</button></div>
-    <div class="card radar">
-      <div id="rdMap"></div>
-      <div class="rdbar">
-        <button class="ib" type="button" id="rdPlay" title="Abspielen">▶</button>
-        <input type="range" id="rdRange" min="0" max="12" value="4" aria-label="Zeitpunkt">
-        <span class="rdt" id="rdTime">–</span>
-      </div>
-    </div>
-  </div>
-
   <div id="appsWrap">
     <div class="h2"><b>Anwendungen</b></div>
     <div class="grid" id="grid"></div>
   </div>
 
-  <footer id="foot">Wetter: Open-Meteo · Radar: Deutscher Wetterdienst</footer>
+  <footer id="foot">Wetter: Open-Meteo</footer>
 </div>
 
 <!-- Link -->
@@ -557,7 +534,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   var SWATCH = ["#2f4fd1","#0f8a6b","#d08a12","#7b3fa0","#c2255c","#e8590c","#1098ad","#2b8a3e","#64748b"];
   var DAYS = ["Mo","Di","Mi","Do","Fr","Sa","So"];
   var VIEW = [
-    ["weather","Wetter"], ["radar","Regenradar"], ["events","Termine"], ["notes","Notizen & To-dos"], ["quick","Schnellzugriff"],
+    ["weather","Wetter"], ["rainbar","Regenvorhersage"], ["events","Termine"], ["notes","Notizen & To-dos"], ["quick","Schnellzugriff"],
     ["apps","Anwendungen"], ["recent","Zuletzt geöffnet"], ["week","Wochenplan (oben)"], ["holidays","Feiertage SH"],
     ["pdate","Persisches Datum"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["keys","Tastenkürzel 1–9"], ["articles","Artikel in der Suche"]
   ];
@@ -769,7 +746,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     if (!force) { try { var c = JSON.parse(ls(WX_KEY)); if (c && c.k === key && Date.now() - c.t < 20 * 60000) { drawWeather(c.d); return; } } catch(e){} }
     var url = "https://api.open-meteo.com/v1/forecast?latitude=" + w.lat + "&longitude=" + w.lon +
       "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,is_day" +
-      "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&minutely_15=precipitation&forecast_minutely_15=12&timezone=auto&forecast_days=5";
+      "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&minutely_15=precipitation&forecast_minutely_15=12&hourly=precipitation_probability,precipitation&forecast_hours=12&timezone=auto&forecast_days=5";
     fetch(url).then(function(r){ if (!r.ok) throw 0; return r.json(); }).then(function(d){ ls(WX_KEY, JSON.stringify({k:key, t:Date.now(), d:d})); drawWeather(d); })
       .catch(function(){ $("weather").innerHTML = wTop() + '<div class="w-msg">Wetter gerade nicht erreichbar.</div>'; });
   }
@@ -784,7 +761,17 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       '<div class="w-main"><div class="w-ico">' + info[1] + '</div><div class="w-temp">' + Math.round(cur.temperature_2m) + '°</div></div>' +
       '<div class="w-desc">' + info[0] + ' · gefühlt ' + Math.round(cur.apparent_temperature) + '°</div>' +
       '<div class="w-meta">' + Math.round(dl.temperature_2m_max[0]) + '° / ' + Math.round(dl.temperature_2m_min[0]) + '° · Regen ' + (dl.precipitation_probability_max[0] || 0) + ' % · Wind ' + Math.round(cur.wind_speed_10m) + ' km/h<br>Sonne ' + t5(dl.sunrise[0]) + '–' + t5(dl.sunset[0]) + '</div>' +
-      rainLine(d) + '<div class="w-days">' + days + '</div>';
+      rainLine(d) + rainBars(d) + '<div class="w-days">' + days + '</div>';
+  }
+  function rainBars(d){
+    var h = d.hourly; if (!on("rainbar") || !h || !h.time || !h.time.length) return "";
+    var n = Math.min(12, h.time.length), bars = "", lbl = "";
+    for (var i = 0; i < n; i++) {
+      var p = h.precipitation_probability ? (h.precipitation_probability[i] || 0) : 0, mm = h.precipitation ? (h.precipitation[i] || 0) : 0;
+      bars += '<i class="' + (mm >= 0.1 ? 'wet' : '') + '" style="height:' + Math.max(6, p) + '%" title="' + h.time[i].slice(11, 13) + ' Uhr: ' + p + ' % · ' + String(mm.toFixed(1)).replace(".", ",") + ' mm"></i>';
+    }
+    [0, 3, 6, 9].forEach(function(i){ if (i < n) lbl += '<span>' + h.time[i].slice(11, 13) + '</span>'; });
+    return '<div class="rbar" title="Regenwahrscheinlichkeit, nächste 12 Std.">' + bars + '</div><div class="rlbl">' + lbl + '<span>Uhr</span></div>';
   }
   function rainLine(d){
     var m = d.minutely_15; if (!m || !m.time || !d.current || !d.current.time) return "";
@@ -809,13 +796,13 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     fetch("https://geocoding-api.open-meteo.com/v1/search?count=1&language=de&name=" + encodeURIComponent(name.trim())).then(function(r){ return r.json(); }).then(function(g){
       var p = g && g.results && g.results[0];
       if (!p) { toast("Ort nicht gefunden"); return; }
-      data.weather = {name:p.name, lat:p.latitude, lon:p.longitude}; save(); loadWeather(true); rdCenter();
+      data.weather = {name:p.name, lat:p.latitude, lon:p.longitude}; save(); loadWeather(true);
     }).catch(function(){ toast("Ortssuche nicht erreichbar"); });
   }
   function useGeo(){
     if (!navigator.geolocation) { toast("Standort nicht verfügbar"); return; }
     navigator.geolocation.getCurrentPosition(function(pos){
-      data.weather = {name:"Mein Standort", lat:+pos.coords.latitude.toFixed(4), lon:+pos.coords.longitude.toFixed(4)}; save(); loadWeather(true); rdCenter();
+      data.weather = {name:"Mein Standort", lat:+pos.coords.latitude.toFixed(4), lon:+pos.coords.longitude.toFixed(4)}; save(); loadWeather(true);
     }, function(){ toast("Standort nicht freigegeben"); }, {timeout:10000});
   }
   $("weather").addEventListener("click", function(e){
@@ -823,80 +810,6 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     if (b.dataset.w === "refresh") loadWeather(true);
     if (b.dataset.w === "city") setCity();
     if (b.dataset.w === "geo") useGeo();
-  });
-
-  /* ================= Regenradar (DWD) ================= */
-  var leafletP = null, rd = null;
-  function loadLeaflet(){
-    if (window.L) return Promise.resolve();
-    if (leafletP) return leafletP;
-    leafletP = new Promise(function(res, rej){
-      var c = document.createElement("link"); c.rel = "stylesheet"; c.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"; document.head.appendChild(c);
-      var s = document.createElement("script"); s.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
-      s.onload = res; s.onerror = function(){ leafletP = null; rej(); }; document.head.appendChild(s);
-    });
-    return leafletP;
-  }
-  var RD_STEP = 15, RD_PAST = 4, RD_FUT = 8;
-  function rdFrames(){
-    var base = Math.floor((Date.now() - 6 * 60000) / 300000) * 300000, out = [];
-    for (var k = -RD_PAST; k <= RD_FUT; k++) out.push(new Date(base + k * RD_STEP * 60000));
-    return out;
-  }
-  function dark(){ return window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches; }
-  function initRadar(){
-    if (!on("radar")) return;
-    if (rd) { rdCenter(); return; }
-    loadLeaflet().then(function(){
-      if (rd) return;
-      var L = window.L, w = data.weather;
-      var map = L.map("rdMap", {zoomControl:false, attributionControl:true, scrollWheelZoom:false, minZoom:5, maxZoom:11}).setView([w.lat, w.lon], 8);
-      L.control.zoom({position:"topright"}).addTo(map);
-      map.attributionControl.setPrefix(false);
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/" + (dark() ? "dark_all" : "light_all") + "/{z}/{x}/{y}{r}.png",
-        {subdomains:"abcd", maxZoom:19, attribution:"© OpenStreetMap, © CARTO"}).addTo(map);
-      map.on("focus", function(){ map.scrollWheelZoom.enable(); });
-      map.on("blur", function(){ map.scrollWheelZoom.disable(); });
-      var marker = L.circleMarker([w.lat, w.lon], {radius:5, color:"#fff", weight:2, fillColor:"#2f4fd1", fillOpacity:1}).addTo(map);
-      rd = {map:map, marker:marker, frames:[], layers:[], cur:-1, timer:null, stamp:0};
-      rdBuild();
-      setInterval(function(){ if (!rd.timer && Date.now() - rd.stamp > 5 * 60000) rdBuild(); }, 60000);
-    }).catch(function(){ $("rdMap").innerHTML = '<div class="muted" style="padding:20px">Karte konnte nicht geladen werden.</div>'; });
-  }
-  function rdBuild(){
-    var L = window.L;
-    rd.layers.forEach(function(l){ rd.map.removeLayer(l); });
-    rd.frames = rdFrames(); rd.stamp = Date.now();
-    rd.layers = rd.frames.map(function(t){
-      return L.tileLayer.wms("https://maps.dwd.de/geoserver/dwd/wms", {
-        layers:"dwd:Niederschlagsradar", format:"image/png", transparent:true, version:"1.3.0",
-        time:t.toISOString().replace(/\.\d{3}Z$/, ".000Z"), opacity:0, attribution:"Radar: © Deutscher Wetterdienst", tileSize:512, zIndex:5
-      }).addTo(rd.map);
-    });
-    $("rdRange").max = rd.frames.length - 1;
-    rdShow(RD_PAST);
-  }
-  function rdShow(i){
-    if (!rd || !rd.layers.length) return;
-    rd.layers.forEach(function(l, k){ l.setOpacity(k === i ? 0.75 : 0); });
-    rd.cur = i; $("rdRange").value = i;
-    var t = rd.frames[i], diff = Math.round((t - rd.frames[RD_PAST]) / 60000);
-    var lbl = diff === 0 ? "jetzt" : (diff > 0 ? "+" : "−") + Math.abs(diff) + " Min";
-    $("rdTime").innerHTML = "<b>" + hm(t) + "</b> · " + lbl + (diff > 0 ? " (Prognose)" : "");
-  }
-  function rdCenter(){ if (rd) { rd.map.setView([data.weather.lat, data.weather.lon], rd.map.getZoom()); rd.marker.setLatLng([data.weather.lat, data.weather.lon]); } }
-  function rdStop(){ if (rd && rd.timer) { clearInterval(rd.timer); rd.timer = null; } $("rdPlay").textContent = "▶"; }
-  $("rdPlay").addEventListener("click", function(){
-    if (!rd) return;
-    if (rd.timer) { rdStop(); return; }
-    if (Date.now() - rd.stamp > 5 * 60000) rdBuild();
-    $("rdPlay").textContent = "❚❚";
-    rd.timer = setInterval(function(){ rdShow((rd.cur + 1) % rd.frames.length); }, 700);
-  });
-  $("rdRange").addEventListener("input", function(e){ rdStop(); rdShow(+e.target.value); });
-  $("rdBig").addEventListener("click", function(){
-    var m = $("rdMap"); m.style.height = m.style.height ? "" : "70vh";
-    if (rd) setTimeout(function(){ rd.map.invalidateSize(); }, 50);
   });
 
   /* ================= Artikel nachschlagen (Wiktionary) ================= */
@@ -976,8 +889,6 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     $("pwMenu").textContent = hasPw() ? "Passwort ändern" : "Passwort festlegen";
     $("pwOffMenu").classList.toggle("hide", !hasPw());
     $("weather").classList.toggle("hide", !on("weather"));
-    $("radarWrap").classList.toggle("hide", !on("radar") || (!!query && !editMode));
-    if (on("radar")) initRadar(); else rdStop();
     tick(); renderRecent(); renderEvents(); renderNotes(); showDirty();
 
     var searching = !!query && !editMode;
@@ -988,7 +899,6 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 
     var qh = "", qShown = 0;
     data.quick.forEach(function(l, i){
-      if (searching && !matches(l)) return;
       qShown++;
       qh += '<a class="qt" href="' + esc(l.url) + '"' + (l.newTab ? ' target="_blank" rel="noopener"' : '') + ' data-s="q" data-l="' + i + '" title="' + esc(l.url) + '">' +
         (on("keys") && i < 9 ? '<span class="qk">' + (i + 1) + '</span>' : '') + iconHtml(l) + '<span class="qn">' + esc(l.title) + '</span>' +
@@ -996,7 +906,8 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     });
     qh += '<button class="qadd" type="button" data-a="lAdd" data-s="q">＋</button>';
     $("quick").innerHTML = qh;
-    $("quickWrap").classList.toggle("hide", !on("quick") || (searching && !qShown));
+    $("quickWrap").classList.toggle("hide", !on("quick"));
+    qShown = 0;
 
     var html = "", shown = 0;
     data.sections.forEach(function(s, si){
@@ -1428,8 +1339,10 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   $("q").addEventListener("input", function(e){ query = e.target.value.trim(); render(); artLookup(query); });
   $("q").addEventListener("keydown", function(e){
     if (e.key === "Enter" && query) {
-      var first = document.querySelector("#quick a[data-l], #grid a[data-l]");
-      if (first && !editMode) first.click(); else if (!first) location.href = "https://www.google.com/search?q=" + encodeURIComponent(query);
+      if (editMode) return;
+      var qi = -1; data.quick.some(function(l, i){ if (matches(l)) { qi = i; return true; } return false; });
+      var first = qi >= 0 ? document.querySelector('#quick a[data-l="' + qi + '"]') : document.querySelector("#grid a[data-l]");
+      if (first) first.click(); else location.href = "https://www.google.com/search?q=" + encodeURIComponent(query);
     }
     if (e.key === "Escape") { e.target.value = ""; query = ""; render(); artLookup(""); e.target.blur(); }
   });
