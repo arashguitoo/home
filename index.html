@@ -208,6 +208,35 @@ input[type=color]{width:100%;height:44px;border:1px solid var(--line);border-rad
 .swatches{display:flex;gap:7px;flex-wrap:wrap;margin-top:-4px}
 .swatches button{width:24px;height:24px;border-radius:50%;border:2px solid var(--card-solid);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
 
+/* Termine */
+.evcard{background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:10px 12px 12px;position:relative;overflow:hidden}
+.evcard::before{content:"";position:absolute;inset:0 0 auto 0;height:70px;background:linear-gradient(180deg,color-mix(in srgb,#e8590c 13%,transparent),transparent);pointer-events:none}
+.evlist{position:relative;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:4px 12px}
+.ev{display:flex;align-items:center;gap:12px;padding:9px 8px;border-radius:14px}
+.ev:hover{background:var(--hover)}
+.evd{width:50px;flex:none;text-align:center;border-radius:12px;padding:5px 0 6px;background:var(--card-solid);box-shadow:inset 0 0 0 1px var(--line)}
+.evd small{display:block;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#e8590c}
+.evd b{display:block;font-size:1.3rem;line-height:1.1}
+.ev.today .evd{background:#e8590c;box-shadow:none;color:#fff}
+.ev.today .evd small{color:#fff;opacity:.9}
+.evt{flex:1;min-width:0}
+.evt b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evt small{display:block;color:var(--muted);font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eva{display:flex;gap:0;flex:none}
+.evempty{position:relative;color:var(--muted);text-align:center;padding:16px 8px;font-size:.92rem}
+.evbar{position:relative;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;padding:4px 4px 0}
+.today-line{margin-top:6px;font-size:.95rem;color:var(--muted)}
+.today-line b{color:var(--ink)}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg .btn{flex:1;min-width:140px}
+
+/* Sicherung */
+.backup{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 0;padding:12px 16px;border-radius:14px;
+  background:color-mix(in srgb,#d08a12 14%,var(--card-solid));border:1px solid color-mix(in srgb,#d08a12 40%,transparent);font-size:.92rem}
+.backup span{flex:1;min-width:220px}
+.dotwarn{position:relative}
+.dotwarn::after{content:"";position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#e8590c}
+
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:12px;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:200}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
@@ -222,10 +251,70 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
   .icobtn .lbl{display:none}
   .search .hint{display:none}
 }
+
+/* ===== Ruhiges, aufgeräumtes Design ===== */
+:root{--bg:#f5f5f2;--card:#ffffff;--card-solid:#ffffff;--ink:#1d1f24;--muted:#7a7f8a;--line:#e6e5e0;--hover:#f3f2ee;
+  --accent:#2f4fd1;--shadow:none;--shadow-hi:0 6px 20px -10px rgba(0,0,0,.18)}
+@media (prefers-color-scheme: dark){:root{--bg:#121316;--card:#1a1c20;--card-solid:#1a1c20;--ink:#e9eaed;--muted:#8d929c;--line:#2a2d33;--hover:#22252a;--accent:#8aa0ff}}
+body{background:var(--bg)}
+.wrap{max-width:1040px;padding-top:22px}
+.brand{font-size:.9rem;letter-spacing:.04em}
+.icobtn{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;border-color:transparent;height:36px}
+.icobtn:hover{background:var(--hover);transform:none}
+.hero{padding:34px 0 26px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.clock{font-size:clamp(3rem,7vw,4.4rem);font-weight:200;letter-spacing:-.04em}
+.greet{font-size:1.25rem;font-weight:600;margin-top:8px}
+.weather,.weather.w-sun,.weather.w-cloud,.weather.w-rain,.weather.w-snow,.weather.w-storm,.weather.w-fog,.weather.w-night{
+  background:var(--card);color:var(--ink);box-shadow:none;border:1px solid var(--line);border-radius:18px;width:320px}
+.weather::after{display:none}
+.w-top{color:var(--muted)}
+.w-top b{color:var(--ink);font-weight:600}
+.w-btns button{background:transparent;color:var(--muted)}
+.w-btns button:hover{background:var(--hover);color:var(--ink)}
+.w-ico{filter:none;font-size:2.4rem}
+.w-temp{font-size:2.6rem;font-weight:200}
+.w-meta{color:var(--muted);opacity:1}
+.w-days{border-top-color:var(--line)}
+.w-day b{color:var(--muted);font-weight:600}
+.search{margin-top:22px}
+.search input{height:50px;border-radius:14px;box-shadow:none;background:var(--card)}
+.search input:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
+.chip{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.chip:hover{background:var(--card);transform:none}
+.h2{margin:38px 2px 12px}
+.h2 b{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.h2 small{font-size:.8rem}
+.qt{background:var(--card);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-radius:16px;padding:14px 6px 11px}
+.qt:hover{transform:none;box-shadow:var(--shadow-hi);background:var(--card)}
+.qi{width:42px;height:42px;border-radius:12px;box-shadow:none;background:var(--hover);font-size:1.3rem}
+.qi img{width:24px;height:24px}
+.qn{font-weight:500;font-size:.85rem}
+.qadd,.addsec{border-width:1px}
+.sec,.evcard{background:var(--card);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-radius:16px}
+.sec:hover{box-shadow:none}
+.sec::before,.evcard::before{display:none}
+.sec{border-top:3px solid var(--c)}
+.sec-h{padding:16px 16px 6px;gap:11px}
+.tile{width:34px;height:34px;border-radius:10px;font-size:1.1rem;background:color-mix(in srgb,var(--c) 12%,transparent);box-shadow:none}
+.sec-t b{font-size:1.05rem}
+.lk a{padding:8px 8px;border-radius:10px}
+.lk a:hover{transform:none}
+.lk .ki{width:28px;height:28px;border-radius:8px;font-size:.9rem;background:transparent}
+.badge{background:transparent;padding:0;font-weight:600;color:var(--muted)}
+.empty{border:0;padding:12px 8px}
+.empty span{display:none}
+.evd{background:transparent;box-shadow:none;width:44px}
+.ev.today .evd{background:var(--accent)}
+.evd small{color:var(--accent)}
+.backup{background:var(--card);border-color:var(--line);border-left:3px solid #e8590c}
+.notice{background:var(--card)}
+dialog{border-radius:16px}
+footer{opacity:.8}
+@media (hover:hover){.eva{opacity:0;transition:opacity .15s}.ev:hover .eva{opacity:1}}
+.evbar .btn{padding:8px 14px}
 </style>
 </head>
 <body>
-<div class="blobs"><i></i><i></i><i></i></div>
 
 <!-- Sperrbildschirm -->
 <div id="lock">
@@ -274,6 +363,7 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
       <div class="clock" id="clock">--:--</div>
       <div class="greet" id="greet">Hallo</div>
       <div class="date" id="date"></div>
+      <div class="today-line" id="todayLine"></div>
     </div>
     <div class="weather" id="weather"><div class="w-msg">Wetter wird geladen …</div></div>
   </section>
@@ -289,13 +379,29 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
     <b>Bearbeitungsmodus.</b> Änderungen werden sofort in diesem Browser gespeichert. Für alle Geräte: <b>⋯ → Exportieren</b> und <code>links.json</code> neben diese <code>index.html</code> ins Repo hochladen<span id="encNote"></span>.
   </div>
 
+  <div class="backup hide" id="backup">
+    <span>💾 <b>Ungesicherte Änderungen.</b> Damit deine Struktur bei Updates und auf anderen Geräten erhalten bleibt: exportieren und <code>links.json</code> in den Ordner <code>home</code> im Repo hochladen.</span>
+    <button class="btn primary" type="button" id="backupBtn">Jetzt exportieren</button>
+  </div>
+
   <div id="quickWrap">
-    <div class="h2"><b>⭐ Schnellzugriff</b><small>Seiten, die du täglich nutzt</small></div>
+    <div class="h2"><b>Schnellzugriff</b></div>
     <div class="quick" id="quick"></div>
   </div>
 
+  <div id="evWrap">
+    <div class="h2"><b>Termine</b><small>mit einem Klick in deinen Kalender</small></div>
+    <div class="evcard">
+      <ul class="evlist" id="evlist"></ul>
+      <div class="evbar">
+        <button class="btn" type="button" id="evAll" title="Alle kommenden Termine als eine Datei">📥 Alle als .ics</button>
+        <button class="btn primary" type="button" id="evAdd">＋ Termin</button>
+      </div>
+    </div>
+  </div>
+
   <div id="appsWrap">
-    <div class="h2"><b>🗂️ Meine Anwendungen</b><small>Ordner mit Hauptseiten und Konsolen</small></div>
+    <div class="h2"><b>Anwendungen</b></div>
     <div class="grid" id="grid"></div>
   </div>
 
@@ -365,6 +471,44 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
   </form>
 </dialog>
 
+<!-- Termin-Dialog -->
+<dialog id="evDlg">
+  <form method="dialog" id="evForm" autocomplete="off">
+    <h2 id="evDlgT">Neuer Termin</h2>
+    <label class="fld"><span>Was? *</span><input type="text" name="title" required maxlength="140" placeholder="z. B. Teamsitzung Kita"></label>
+    <div class="row">
+      <label class="fld"><span>Datum *</span><input type="date" name="d" required style="width:100%;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:11px;background:var(--bg)"></label>
+      <label class="fld" style="flex:0 0 auto;align-self:end"><span>&nbsp;</span><label class="chk" style="height:44px;margin:0"><input type="checkbox" name="allDay"> Ganztägig</label></label>
+    </div>
+    <div class="row" id="timeRow">
+      <label class="fld"><span>Beginn</span><input type="time" name="start" value="09:00" style="width:100%;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:11px;background:var(--bg)"></label>
+      <label class="fld"><span>Ende</span><input type="time" name="end" value="10:00" style="width:100%;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:11px;background:var(--bg)"></label>
+    </div>
+    <div class="row">
+      <label class="fld"><span>Ort (optional)</span><input type="text" name="loc" maxlength="140" placeholder="z. B. AWO Plön, Raum 2"></label>
+      <label class="fld" style="flex:0 0 150px"><span>Erinnerung</span>
+        <select name="alarm">
+          <option value="0">keine</option>
+          <option value="15">15 Min. vorher</option>
+          <option value="30" selected>30 Min. vorher</option>
+          <option value="60">1 Std. vorher</option>
+          <option value="1440">1 Tag vorher</option>
+        </select>
+      </label>
+    </div>
+    <label class="fld"><span>Notiz (optional)</span><input type="text" name="note" maxlength="300"></label>
+    <div class="err" id="evErr" style="color:var(--danger);font-size:.88rem;min-height:1.2em;margin:-4px 0 8px"></div>
+    <div class="seg">
+      <button class="btn primary" type="submit" data-go="ics">📥 Speichern + .ics-Datei</button>
+      <button class="btn primary" type="submit" data-go="google">📅 Speichern + Google Kalender</button>
+    </div>
+    <div class="acts" style="margin-top:10px">
+      <button class="btn" type="button" data-close>Abbrechen</button>
+      <button class="btn" type="submit" data-go="save">Nur speichern</button>
+    </div>
+  </form>
+</dialog>
+
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
 <div class="toast" id="toast"></div>
 
@@ -424,6 +568,9 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
     if (d.name == null) d.name = "";
     if (!d.weather || typeof d.weather.lat !== "number") d.weather = {name:"Kiel", lat:54.3233, lon:10.1228};
     if (!Array.isArray(d.quick)) d.quick = defaultQuick();
+    if (!Array.isArray(d.events)) d.events = [];
+    d.events = d.events.filter(function(ev){ return ev && ev.title && /^\d{4}-\d{2}-\d{2}$/.test(ev.date); });
+    d.events.forEach(function(ev){ ev.id = ev.id || uid(); ev.loc = ev.loc || ""; ev.note = ev.note || ""; ev.alarm = +ev.alarm || 0; ev.allDay = !!ev.allDay; });
     d.quick.forEach(normLink);
     d.sections.forEach(function(s){
       s.id = s.id || uid(); s.icon = s.icon || "📁";
@@ -435,7 +582,13 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
   function list(k){ return k === "q" ? data.quick : data.sections[k].links; }
   function keyOf(v){ return v === "q" ? "q" : parseInt(v, 10); }
 
-  function save(){ ls(LS_KEY, JSON.stringify(data)); }
+  var DIRTY_KEY = "zentrale.dirty.v1";
+  function save(){ ls(LS_KEY, JSON.stringify(data)); ls(DIRTY_KEY, "1"); showBackup(); }
+  function showBackup(){
+    var dirty = ls(DIRTY_KEY) === "1";
+    $("backup").classList.toggle("hide", !dirty);
+    $("menuBtn").classList.toggle("dotwarn", dirty);
+  }
   function loadLocal(){ try { var d = JSON.parse(ls(LS_KEY)); return valid(d) ? normalize(d) : null; } catch(e){ return null; } }
   function fetchServer(){
     if (!window.fetch) return Promise.resolve(null);
@@ -549,9 +702,9 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
         '<button data-w="refresh" title="Neu laden">↻</button></div></div>' +
       '<div class="w-main"><div class="w-ico">' + info[1] + '</div><div class="w-temp">' + Math.round(cur.temperature_2m) + '°</div></div>' +
       '<div class="w-desc">' + info[0] + ' · gefühlt ' + Math.round(cur.apparent_temperature) + '°</div>' +
-      '<div class="w-meta">↑ ' + Math.round(daily.temperature_2m_max[0]) + '° ↓ ' + Math.round(daily.temperature_2m_min[0]) + '° · 💧 ' +
-        (daily.precipitation_probability_max[0] != null ? daily.precipitation_probability_max[0] : 0) + ' % · 💨 ' + Math.round(cur.wind_speed_10m) + ' km/h · 🌅 ' +
-        hm(daily.sunrise[0]) + ' 🌇 ' + hm(daily.sunset[0]) + '</div>' +
+      '<div class="w-meta">' + Math.round(daily.temperature_2m_max[0]) + '° / ' + Math.round(daily.temperature_2m_min[0]) + '° · Regen ' +
+        (daily.precipitation_probability_max[0] != null ? daily.precipitation_probability_max[0] : 0) + ' % · Wind ' + Math.round(cur.wind_speed_10m) + ' km/h<br>Sonne ' +
+        hm(daily.sunrise[0]) + '–' + hm(daily.sunset[0]) + '</div>' +
       '<div class="w-days">' + days + '</div>';
   }
   function setCity(){
@@ -603,8 +756,9 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
     $("lockBtn").classList.toggle("hide", !hasPw());
     $("pwMenu").textContent = hasPw() ? "🔐 Passwort ändern" : "🔐 Passwort festlegen";
     $("pwOffMenu").classList.toggle("hide", !hasPw());
-    tick(); renderRecent();
+    tick(); renderRecent(); renderEvents(); showBackup();
     var searching = query && !editMode;
+    $("evWrap").classList.toggle("hide", !!searching);
 
     /* Schnellzugriff */
     var qh = "", qShown = 0;
@@ -681,6 +835,145 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
       sp.classList.add("letter"); sp.style.background = letterColor(t); sp.textContent = t.trim().charAt(0).toUpperCase();
     }
   }, true);
+
+  /* ---------- Termine ---------- */
+  function p2(n){ return String(n).padStart(2, "0"); }
+  function todayStr(){ var n = new Date(); return n.getFullYear() + "-" + p2(n.getMonth() + 1) + "-" + p2(n.getDate()); }
+  function addDays(ds, k){ var d = new Date(ds + "T12:00:00"); d.setDate(d.getDate() + k); return d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()); }
+  function evStart(ev){ return new Date(ev.date + "T" + (ev.allDay ? "00:00" : ev.start) + ":00"); }
+  function evEnd(ev){
+    if (ev.allDay) return new Date(addDays(ev.date, 1) + "T00:00:00");
+    var e = new Date(ev.date + "T" + (ev.end || ev.start) + ":00");
+    if (e <= evStart(ev)) e = new Date(evStart(ev).getTime() + 60 * 60000);
+    return e;
+  }
+  function utcStamp(d){ return d.getUTCFullYear() + p2(d.getUTCMonth() + 1) + p2(d.getUTCDate()) + "T" + p2(d.getUTCHours()) + p2(d.getUTCMinutes()) + "00Z"; }
+  function upcoming(){
+    var now = new Date();
+    return data.events.filter(function(ev){ return evEnd(ev) > now; })
+      .sort(function(a, b){ return evStart(a) - evStart(b); });
+  }
+  function purgeOld(){
+    var cut = addDays(todayStr(), -30), before = data.events.length;
+    data.events = data.events.filter(function(ev){ return ev.date >= cut; });
+    if (data.events.length !== before) save();
+  }
+
+  function icsEsc(s){ return String(s || "").replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n"); }
+  function fold(line){
+    var out = [], bytes = te.encode(line);
+    if (bytes.length <= 74) return line;
+    var cur = "", curLen = 0;
+    for (var ch of line) {
+      var l = te.encode(ch).length;
+      if (curLen + l > 74) { out.push(cur); cur = " " + ch; curLen = 1 + l; }
+      else { cur += ch; curLen += l; }
+    }
+    out.push(cur);
+    return out.join("\r\n");
+  }
+  function vevent(ev){
+    var L = ["BEGIN:VEVENT", "UID:" + ev.id + "@arashs-zentrale", "DTSTAMP:" + utcStamp(new Date())];
+    if (ev.allDay) { L.push("DTSTART;VALUE=DATE:" + ev.date.replace(/-/g, ""), "DTEND;VALUE=DATE:" + addDays(ev.date, 1).replace(/-/g, "")); }
+    else { L.push("DTSTART:" + utcStamp(evStart(ev)), "DTEND:" + utcStamp(evEnd(ev))); }
+    L.push("SUMMARY:" + icsEsc(ev.title));
+    if (ev.loc) L.push("LOCATION:" + icsEsc(ev.loc));
+    if (ev.note) L.push("DESCRIPTION:" + icsEsc(ev.note));
+    if (ev.alarm) L.push("BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:" + icsEsc(ev.title), "TRIGGER:-PT" + ev.alarm + "M", "END:VALARM");
+    L.push("END:VEVENT");
+    return L;
+  }
+  function buildIcs(evs){
+    var L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Arashs Zentrale//DE", "CALSCALE:GREGORIAN", "METHOD:PUBLISH"];
+    evs.forEach(function(ev){ L = L.concat(vevent(ev)); });
+    L.push("END:VCALENDAR");
+    return L.map(fold).join("\r\n") + "\r\n";
+  }
+  function safeName(s){ return (String(s).replace(/[^\wäöüÄÖÜß -]+/g, "").trim().replace(/\s+/g, "-").slice(0, 40) || "termin"); }
+  function downloadIcs(evs, name){
+    var blob = new Blob([buildIcs(evs)], {type:"text/calendar;charset=utf-8"});
+    var url = URL.createObjectURL(blob), a = document.createElement("a");
+    a.href = url; a.download = name + ".ics"; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+  }
+  function googleUrl(ev){
+    var dates = ev.allDay ? ev.date.replace(/-/g, "") + "/" + addDays(ev.date, 1).replace(/-/g, "")
+                          : utcStamp(evStart(ev)) + "/" + utcStamp(evEnd(ev));
+    return "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(ev.title) +
+      "&dates=" + dates + "&details=" + encodeURIComponent(ev.note) + "&location=" + encodeURIComponent(ev.loc);
+  }
+
+  function renderEvents(){
+    var up = upcoming(), td0 = todayStr();
+    var todays = up.filter(function(ev){ return ev.date === td0; });
+    $("todayLine").innerHTML = todays.length
+      ? "📅 Heute: <b>" + esc(todays.map(function(ev){ return (ev.allDay ? "" : ev.start + " ") + ev.title; }).join(" · ")) + "</b>"
+      : "";
+    $("evAll").classList.toggle("hide", up.length < 2);
+    if (!up.length) { $("evlist").innerHTML = '<li class="evempty" style="grid-column:1/-1">Keine anstehenden Termine.</li>'; return; }
+    $("evlist").innerHTML = up.slice(0, 8).map(function(ev){
+      var d = evStart(ev), i = data.events.indexOf(ev);
+      var wd = d.toLocaleDateString("de-DE", {weekday:"short"}).replace(".", "");
+      var mon = d.toLocaleDateString("de-DE", {month:"short"}).replace(".", "");
+      var tm = ev.allDay ? "ganztägig" : ev.start + "–" + ev.end;
+      return '<li class="ev' + (ev.date === td0 ? ' today' : '') + '">' +
+        '<div class="evd"><small>' + esc(mon) + '</small><b>' + d.getDate() + '</b></div>' +
+        '<div class="evt"><b>' + esc(ev.title) + '</b><small>' + esc(wd) + ' · ' + esc(tm) + (ev.loc ? ' · ' + esc(ev.loc) : '') + '</small></div>' +
+        '<div class="eva">' +
+          '<button class="ib" type="button" data-e="ics" data-i="' + i + '" title="Als .ics-Datei">📥</button>' +
+          '<button class="ib" type="button" data-e="google" data-i="' + i + '" title="In Google Kalender">📅</button>' +
+          '<button class="ib" type="button" data-e="edit" data-i="' + i + '" title="Bearbeiten">✎</button>' +
+          '<button class="ib" type="button" data-e="del" data-i="' + i + '" title="Löschen">🗑</button>' +
+        '</div></li>';
+    }).join("") + (up.length > 8 ? '<li class="evempty" style="grid-column:1/-1">+ ' + (up.length - 8) + ' weitere</li>' : '');
+  }
+
+  var evCtx = null, evGo = "ics";
+  function openEv(i){
+    var f = $("evForm"), ev = i == null ? null : data.events[i];
+    evCtx = i;
+    $("evDlgT").textContent = ev ? "Termin bearbeiten" : "Neuer Termin";
+    F(f, "title").value = ev ? ev.title : "";
+    F(f, "d").value = ev ? ev.date : todayStr();
+    F(f, "allDay").checked = ev ? ev.allDay : false;
+    F(f, "start").value = ev && !ev.allDay ? ev.start : "09:00";
+    F(f, "end").value = ev && !ev.allDay ? ev.end : "10:00";
+    F(f, "loc").value = ev ? ev.loc : ""; F(f, "note").value = ev ? ev.note : "";
+    F(f, "alarm").value = String(ev ? ev.alarm : 30);
+    $("evErr").textContent = "";
+    $("timeRow").classList.toggle("hide", F(f, "allDay").checked);
+    $("evDlg").showModal(); setTimeout(function(){ F(f, "title").focus(); }, 30);
+  }
+  F($("evForm"), "allDay").addEventListener("change", function(e){ $("timeRow").classList.toggle("hide", e.target.checked); });
+  F($("evForm"), "start").addEventListener("change", function(e){
+    var f = $("evForm"), s = e.target.value; if (!s) return;
+    var h = (parseInt(s, 10) + 1) % 24; F(f, "end").value = p2(h) + s.slice(2);
+  });
+  $("evForm").querySelectorAll("[data-go]").forEach(function(b){ b.addEventListener("click", function(){ evGo = b.dataset.go; }); });
+  $("evForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var f = e.target, title = F(f, "title").value.trim(), date = F(f, "d").value;
+    if (!title || !/^\d{4}-\d{2}-\d{2}$/.test(date)) { $("evErr").textContent = "Bitte Titel und Datum angeben."; return; }
+    var allDay = F(f, "allDay").checked, start = F(f, "start").value || "09:00", end = F(f, "end").value || start;
+    var ev = {id: evCtx != null ? data.events[evCtx].id : uid(), title:title, date:date, allDay:allDay,
+      start: allDay ? "" : start, end: allDay ? "" : end, loc:F(f, "loc").value.trim(), note:F(f, "note").value.trim(), alarm:+F(f, "alarm").value};
+    if (evCtx != null) data.events[evCtx] = ev; else data.events.push(ev);
+    save(); $("evDlg").close(); render();
+    if (evGo === "ics") { downloadIcs([ev], safeName(title)); toast("Datei öffnen – der Termin wird in deinen Kalender übernommen"); }
+    else if (evGo === "google") { window.open(googleUrl(ev), "_blank", "noopener"); toast("Google Kalender geöffnet – dort auf Speichern klicken"); }
+    else toast("Termin gespeichert");
+    evGo = "ics";
+  });
+  $("evAdd").addEventListener("click", function(){ openEv(null); });
+  $("evAll").addEventListener("click", function(){ downloadIcs(upcoming(), "termine"); toast("Alle kommenden Termine als eine Datei"); });
+  $("evlist").addEventListener("click", function(e){
+    var b = e.target.closest("[data-e]"); if (!b) return;
+    var i = +b.dataset.i, ev = data.events[i];
+    if (b.dataset.e === "ics") downloadIcs([ev], safeName(ev.title));
+    if (b.dataset.e === "google") window.open(googleUrl(ev), "_blank", "noopener");
+    if (b.dataset.e === "edit") openEv(i);
+    if (b.dataset.e === "del" && confirm("Termin „" + ev.title + "“ löschen?\n(Im Kalender bereits übernommene Einträge bleiben dort bestehen.)")) { data.events.splice(i, 1); save(); render(); }
+  });
 
   /* ---------- Link-Dialog ---------- */
   var linkCtx = null, secCtx = null;
@@ -880,21 +1173,25 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
       });
     }
     if (!valid(raw)) { toast("Keine gültige links.json"); return Promise.resolve(); }
-    data = normalize(raw); save(); render(); toast(msg);
+    data = normalize(raw); save(); ls(DIRTY_KEY, null); render(); toast(msg);
     return Promise.resolve();
   }
+
+  function exported(msg){ ls(DIRTY_KEY, null); showBackup(); toast(msg + " – jetzt ins Repo hochladen"); }
+  function doExport(){
+    if (hasPw()) needPw().then(function(pw){
+      if (!pw) return;
+      encryptObj(data, pw).then(function(p){ download(p); exported("Verschlüsselte links.json gespeichert"); });
+    });
+    else { download(data); exported("links.json gespeichert"); }
+  }
+  $("backupBtn").addEventListener("click", doExport);
 
   $("menuList").addEventListener("click", function(e){
     var b = e.target.closest("[data-act]"); if (!b) return;
     $("menuList").classList.remove("open");
     switch (b.dataset.act) {
-      case "export":
-        if (hasPw()) needPw().then(function(pw){
-          if (!pw) return;
-          encryptObj(data, pw).then(function(p){ download(p); toast("Verschlüsselte links.json heruntergeladen"); });
-        });
-        else { download(data); toast("links.json heruntergeladen"); }
-        break;
+      case "export": doExport(); break;
       case "import": $("fileIn").click(); break;
       case "server":
         fetchServer().then(function(raw){
@@ -959,6 +1256,7 @@ footer{margin-top:40px;text-align:center;font-size:.8rem;color:var(--muted)}
     var local = loadLocal();
     if (local) {
       data = local;
+      if (ls(DIRTY_KEY) == null) fetchServer().then(function(raw){ if (!raw) { ls(DIRTY_KEY, "1"); showBackup(); } else ls(DIRTY_KEY, "0"); });
       if (hasPw() && !isUnlocked()) { tick(); showLock("local"); return; }
       render(); loadWeather(); return;
     }
