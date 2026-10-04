@@ -379,11 +379,6 @@ footer{opacity:.8}
     <b>Bearbeitungsmodus.</b> Änderungen werden sofort in diesem Browser gespeichert. Für alle Geräte: <b>⋯ → Exportieren</b> und <code>links.json</code> neben diese <code>index.html</code> ins Repo hochladen<span id="encNote"></span>.
   </div>
 
-  <div class="backup hide" id="backup">
-    <span>💾 <b>Ungesicherte Änderungen.</b> Damit deine Struktur bei Updates und auf anderen Geräten erhalten bleibt: exportieren und <code>links.json</code> in den Ordner <code>home</code> im Repo hochladen.</span>
-    <button class="btn primary" type="button" id="backupBtn">Jetzt exportieren</button>
-  </div>
-
   <div id="quickWrap">
     <div class="h2"><b>Schnellzugriff</b></div>
     <div class="quick" id="quick"></div>
@@ -586,7 +581,6 @@ footer{opacity:.8}
   function save(){ ls(LS_KEY, JSON.stringify(data)); ls(DIRTY_KEY, "1"); showBackup(); }
   function showBackup(){
     var dirty = ls(DIRTY_KEY) === "1";
-    $("backup").classList.toggle("hide", !dirty);
     $("menuBtn").classList.toggle("dotwarn", dirty);
   }
   function loadLocal(){ try { var d = JSON.parse(ls(LS_KEY)); return valid(d) ? normalize(d) : null; } catch(e){ return null; } }
@@ -1185,7 +1179,6 @@ footer{opacity:.8}
     });
     else { download(data); exported("links.json gespeichert"); }
   }
-  $("backupBtn").addEventListener("click", doExport);
 
   $("menuList").addEventListener("click", function(e){
     var b = e.target.closest("[data-act]"); if (!b) return;
