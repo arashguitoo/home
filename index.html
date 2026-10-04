@@ -245,6 +245,23 @@ dialog.big:fullscreen .qrbox .qrc img,dialog.big:fullscreen .qrbox .qrc canvas{w
 .qrbox h3{margin:0;font-size:1.5rem}
 .qrbox code{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
 
+/* Rechner */
+.calc{max-width:380px;margin:0 auto;width:100%}
+.cdisp{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:10px 12px;margin-bottom:10px;text-align:right}
+.cdisp input{width:100%;border:0;background:transparent;outline:none;text-align:right;font-size:1.15rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.cres{font-size:2.3rem;font-weight:300;letter-spacing:-.02em;min-height:1.3em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;cursor:copy}
+.ckeys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ckeys button{height:48px;border:1px solid var(--line);background:var(--card);border-radius:10px;font-size:1.15rem;cursor:pointer}
+.ckeys button:hover{background:var(--hover)}
+.ckeys .op{color:var(--accent);font-weight:600}
+.ckeys .eq{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.ckeys .sm{font-size:.88rem;color:var(--muted)}
+.chist{list-style:none;margin:10px 0 0;padding:0;max-height:150px;overflow:auto;font-size:.88rem}
+.chist li{display:flex;justify-content:space-between;gap:10px;padding:4px 6px;border-radius:7px;cursor:pointer;color:var(--muted)}
+.chist li:hover{background:var(--hover);color:var(--ink)}
+.chist b{color:var(--ink);font-weight:500}
+.art .calc-r{font-size:1.3rem;font-weight:600}
+
 /* Sperre */
 #lock{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:16px;background:var(--bg)}
 body.locked #lock{display:grid}
@@ -294,6 +311,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   <div class="top">
     <div class="brand" id="brand">Arashs Zentrale</div>
     <div class="tools">
+      <button class="ib" id="calcBtn" type="button" title="Taschenrechner">÷</button>
       <button class="ib" id="toolsBtn" type="button" title="Werkzeuge: Timer, Zufall, Gruppen">⏱</button>
       <button class="ib hide" id="lockBtn" type="button" title="Sperren">🔒</button>
       <button class="ib" id="editBtn" type="button" title="Links bearbeiten">✎</button>
@@ -474,9 +492,23 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 <dialog id="toolDlg" class="big">
   <div class="dlg">
     <div class="bighead">
-      <div class="tabs" id="toolTabs"><button class="ib cur" type="button" data-t="timer">Timer</button><button class="ib" type="button" data-t="rand">Zufall</button><button class="ib" type="button" data-t="grp">Gruppen</button><button class="ib" type="button" data-t="names">Namen</button></div>
+      <div class="tabs" id="toolTabs"><button class="ib" type="button" data-t="calc">Rechner</button><button class="ib cur" type="button" data-t="timer">Timer</button><button class="ib" type="button" data-t="rand">Zufall</button><button class="ib" type="button" data-t="grp">Gruppen</button><button class="ib" type="button" data-t="names">Namen</button></div>
       <button class="ib" type="button" id="fsBtn" title="Vollbild">⛶</button>
       <button class="ib" type="button" data-close title="Schließen">✕</button>
+    </div>
+    <div class="pane hide" id="p-calc">
+      <div class="calc">
+        <div class="cdisp"><input id="cIn" type="text" inputmode="decimal" autocomplete="off" placeholder="0" aria-label="Rechnung"><div class="cres" id="cRes" title="Klicken zum Kopieren">0</div></div>
+        <div class="ckeys" id="cKeys">
+          <button class="sm" data-k="C">C</button><button class="sm" data-k="(">(</button><button class="sm" data-k=")">)</button><button class="op" data-k="/">÷</button>
+          <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button class="op" data-k="*">×</button>
+          <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button class="op" data-k="-">−</button>
+          <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button class="op" data-k="+">+</button>
+          <button data-k="0">0</button><button data-k=",">,</button><button class="sm" data-k="%">%</button><button class="eq" data-k="=">=</button>
+          <button class="sm" data-k="bk" title="Löschen">⌫</button><button class="sm" data-k="brutto" title="Netto → Brutto (+19 % USt)">+19 %</button><button class="sm" data-k="netto" title="Brutto → Netto (÷ 1,19)">÷1,19</button><button class="sm" data-k="ust" title="Enthaltene USt (19 %) aus Bruttobetrag">USt</button>
+        </div>
+        <ul class="chist" id="cHist"></ul>
+      </div>
     </div>
     <div class="pane" id="p-timer">
       <div class="timer" id="tDisp">05:00</div>
@@ -536,7 +568,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   var VIEW = [
     ["weather","Wetter"], ["rainbar","Regenvorhersage"], ["events","Termine"], ["notes","Notizen & To-dos"], ["quick","Schnellzugriff"],
     ["apps","Anwendungen"], ["recent","Zuletzt geöffnet"], ["week","Wochenplan (oben)"], ["holidays","Feiertage SH"],
-    ["pdate","Persisches Datum"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["keys","Tastenkürzel 1–9"], ["articles","Artikel in der Suche"]
+    ["pdate","Persisches Datum"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["calc","Taschenrechner"], ["keys","Tastenkürzel 1–9"], ["articles","Artikel in der Suche"]
   ];
 
   var data = null, editMode = false, query = "", sessionPw = null;
@@ -855,8 +887,17 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     h += '<a href="https://de.wiktionary.org/wiki/' + encodeURIComponent(info.base) + '" target="_blank" rel="noopener">Wiktionary ↗</a>';
     $("art").innerHTML = h;
   }
+  var searchCalc = null;
   function artLookup(q){
     clearTimeout(artT);
+    var wasCalc = searchCalc != null || /calc-r/.test($("art").innerHTML);
+    searchCalc = null;
+    if (wasCalc) $("art").innerHTML = "";
+    if (on("calc") && isCalc(String(q || ""))) {
+      var r = calcEval(q);
+      $("art").innerHTML = r == null ? "" : '<span class="calc-r">= ' + esc(fmtNum(r)) + '</span> <small>· Enter kopiert</small>';
+      searchCalc = r; return;
+    }
     var w = String(q || "").trim().replace(/^(der|die|das)\s+/i, "");
     if (!on("articles") || editMode || !/^[A-Za-zÄÖÜäöüß-]{2,40}$/.test(w)) { $("art").innerHTML = ""; return; }
     var key = w.toLowerCase(), seq = ++artSeq;
@@ -866,6 +907,94 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
         .catch(function(){ if (seq === artSeq) $("art").innerHTML = '<small>Wörterbuch gerade nicht erreichbar.</small>'; });
     }, 350);
   }
+
+  /* ================= Rechner ================= */
+  function calcEval(src){
+    var t = String(src).replace(/\s+/g, "").replace(/[×xX]/g, "*").replace(/[÷:]/g, "/").replace(/[−–]/g, "-").replace(/^=/, "").replace(/=$/, "");
+    if (!t) return null;
+    if (t.indexOf(",") !== -1) t = t.replace(/\.(?=\d{3}(\D|$))/g, "").replace(/,/g, ".");
+    if (!/^[0-9.+\-*/^%()]+$/.test(t)) return null;
+    var i = 0;
+    function peek(){ return t.charAt(i); }
+    function num(){
+      var m = t.slice(i).match(/^\d*\.?\d+|^\d+\.?/);
+      if (!m) throw 0; i += m[0].length; return parseFloat(m[0]);
+    }
+    function primary(){
+      var c = peek(), v;
+      if (c === "-") { i++; v = primary(); return {v:-v.v, pct:v.pct}; }
+      if (c === "+") { i++; return primary(); }
+      if (c === "(") { i++; v = add(); if (peek() !== ")") throw 0; i++; v = {v:v, pct:false}; }
+      else v = {v:num(), pct:false};
+      if (peek() === "^") { i++; var e = primary(); v = {v:Math.pow(v.v, e.pct ? e.v / 100 : e.v), pct:false}; }
+      if (peek() === "%") { i++; v = {v:v.v, pct:true}; }
+      return v;
+    }
+    function mul(){
+      var a = primary(), v = a.pct ? a.v / 100 : a.v, single = true;
+      while (peek() === "*" || peek() === "/") {
+        single = false;
+        var op = t.charAt(i++), b = primary(), bv = b.pct ? b.v / 100 : b.v;
+        v = op === "*" ? v * bv : v / bv;
+      }
+      return {v:v, rel:single && a.pct ? a.v : null};
+    }
+    function add(){
+      var first = mul(), v = first.v;
+      while (peek() === "+" || peek() === "-") {
+        var op = t.charAt(i++), b = mul();
+        var bv = b.rel != null ? v * b.rel / 100 : b.v;
+        v = op === "+" ? v + bv : v - bv;
+      }
+      return v;
+    }
+    try { var r = add(); if (i !== t.length || !isFinite(r)) return null; return Math.round(r * 1e10) / 1e10; } catch(e){ return null; }
+  }
+  function fmtNum(v){ return v.toLocaleString("de-DE", {maximumFractionDigits:10}); }
+  function isCalc(q){ return /\d/.test(q) && /[+\-*/×÷:^%(xX]/.test(q.replace(/^-/, "")) && /^[\d\s.,+\-*/×÷:^%()=−–xX]+$/.test(q); }
+  var cHist = [], cFresh = false;
+  function cUpdate(){ var r = calcEval($("cIn").value); $("cRes").textContent = r == null ? ($("cIn").value ? "…" : "0") : fmtNum(r); return r; }
+  function cHistRender(){ $("cHist").innerHTML = cHist.map(function(h, i){ return '<li data-h="' + i + '"><span>' + esc(h.e) + '</span><b>= ' + esc(fmtNum(h.r)) + '</b></li>'; }).join(""); }
+  function cCommit(){
+    var e = $("cIn").value.trim(), r = calcEval(e); if (r == null) return;
+    if (/[+\-*/×÷:^%]/.test(e.replace(/^-/, ""))) { cHist.unshift({e:e, r:r}); cHist = cHist.slice(0, 8); cHistRender(); }
+    $("cIn").value = fmtNum(r).replace(/\./g, ""); cUpdate(); cFresh = true;
+  }
+  function cApply(f, label){
+    var r = calcEval($("cIn").value); if (r == null) return;
+    var out = Math.round(f(r) * 100) / 100;
+    cHist.unshift({e:fmtNum(r) + " " + label, r:out}); cHist = cHist.slice(0, 8); cHistRender();
+    $("cIn").value = fmtNum(out).replace(/\./g, ""); cUpdate(); cFresh = true;
+  }
+  $("cIn").addEventListener("input", function(){ cFresh = false; cUpdate(); });
+  $("cIn").addEventListener("keydown", function(e){
+    if (cFresh && /^[0-9,.(]$/.test(e.key) && !e.ctrlKey && !e.metaKey) { this.value = ""; }
+    if (e.key.length === 1 || e.key === "Backspace") cFresh = false;
+    if (e.key === "Enter" || e.key === "=") { e.preventDefault(); cCommit(); }
+    if (e.key === "Escape" && this.value) { e.preventDefault(); e.stopPropagation(); this.value = ""; cUpdate(); }
+  });
+  $("cKeys").addEventListener("click", function(e){
+    var b = e.target.closest("[data-k]"); if (!b) return;
+    var k = b.dataset.k, inp = $("cIn");
+    if (cFresh && /^[0-9,(]$/.test(k)) inp.value = "";
+    cFresh = false;
+    if (k === "C") inp.value = "";
+    else if (k === "bk") inp.value = inp.value.slice(0, -1);
+    else if (k === "=") { cCommit(); return; }
+    else if (k === "brutto") { cApply(function(v){ return v * 1.19; }, "+ 19 %"); return; }
+    else if (k === "netto") { cApply(function(v){ return v / 1.19; }, "÷ 1,19"); return; }
+    else if (k === "ust") { cApply(function(v){ return v - v / 1.19; }, "→ USt"); return; }
+    else inp.value += {"*":"×","/":"÷","-":"−"}[k] || k;
+    cUpdate();
+  });
+  $("cRes").addEventListener("click", function(){ var r = calcEval($("cIn").value); if (r != null && navigator.clipboard) navigator.clipboard.writeText(fmtNum(r)).then(function(){ toast("Ergebnis kopiert"); }); });
+  $("cHist").addEventListener("click", function(e){ var li = e.target.closest("[data-h]"); if (li) { $("cIn").value = fmtNum(cHist[+li.dataset.h].r).replace(/\./g, ""); cUpdate(); $("cIn").focus(); } });
+  function openCalc(){
+    $("toolDlg").showModal();
+    $("toolTabs").querySelector('[data-t="calc"]').click();
+    $("cIn").focus(); $("cIn").select();
+  }
+  $("calcBtn").addEventListener("click", openCalc);
 
   /* ================= Rendern ================= */
   function matches(l, extra){ return (l.title + " " + l.url + " " + l.note + " " + (extra || "")).toLowerCase().indexOf(query.toLowerCase()) !== -1; }
@@ -886,6 +1015,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     $("editNotice").hidden = !editMode;
     $("lockBtn").classList.toggle("hide", !hasPw());
     $("toolsBtn").classList.toggle("hide", !on("tools"));
+    $("calcBtn").classList.toggle("hide", !on("calc"));
     $("pwMenu").textContent = hasPw() ? "Passwort ändern" : "Passwort festlegen";
     $("pwOffMenu").classList.toggle("hide", !hasPw());
     $("weather").classList.toggle("hide", !on("weather"));
@@ -1200,7 +1330,8 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   $("toolTabs").addEventListener("click", function(e){
     var b = e.target.closest("[data-t]"); if (!b) return;
     [].forEach.call($("toolTabs").children, function(x){ x.classList.toggle("cur", x === b); });
-    ["timer","rand","grp","names"].forEach(function(t){ $("p-" + t).classList.toggle("hide", t !== b.dataset.t); });
+    ["calc","timer","rand","grp","names"].forEach(function(t){ $("p-" + t).classList.toggle("hide", t !== b.dataset.t); });
+    if (b.dataset.t === "calc") setTimeout(function(){ $("cIn").focus(); }, 30);
     if (b.dataset.t === "names") $("names").value = data.tools.names;
     if (b.dataset.t === "rand") rInfo();
   });
@@ -1340,6 +1471,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   $("q").addEventListener("keydown", function(e){
     if (e.key === "Enter" && query) {
       if (editMode) return;
+      if (searchCalc != null) { if (navigator.clipboard) navigator.clipboard.writeText(fmtNum(searchCalc)).then(function(){ toast("Ergebnis kopiert"); }); return; }
       var qi = -1; data.quick.some(function(l, i){ if (matches(l)) { qi = i; return true; } return false; });
       var first = qi >= 0 ? document.querySelector('#quick a[data-l="' + qi + '"]') : document.querySelector("#grid a[data-l]");
       if (first) first.click(); else location.href = "https://www.google.com/search?q=" + encodeURIComponent(query);
