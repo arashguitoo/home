@@ -51,6 +51,17 @@ a{color:inherit}
 
 .hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:26px 0 24px;border-bottom:1px solid var(--line)}
 .clock{font-size:clamp(3rem,7vw,4.4rem);font-weight:200;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.clock,.aclock{cursor:pointer}
+.aclock{width:150px;height:150px;display:block}
+.aclock .face{fill:var(--card);stroke:var(--line);stroke-width:1.5}
+.aclock .tk{stroke:var(--muted);stroke-linecap:round}
+.aclock .tk.h{stroke:var(--ink);stroke-width:3}
+.aclock .tk.m{stroke-width:1;opacity:.5}
+.aclock .hh,.aclock .mh{stroke:var(--ink);stroke-linecap:round}
+.aclock .hh{stroke-width:6}
+.aclock .mh{stroke-width:4}
+.aclock .sh{stroke:var(--warm);stroke-width:1.6;stroke-linecap:round}
+.aclock .hub{fill:var(--warm)}
 .greet{font-size:1.25rem;font-weight:600;margin-top:8px}
 .date{color:var(--muted)}
 .pdate{font-family:Vazirmatn,Tahoma,sans-serif;unicode-bidi:isolate;font-size:.92rem}
@@ -293,6 +304,7 @@ body.locked .wrap{visibility:hidden}
 footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 
 @media (max-width:760px){
+  .aclock{margin:0 auto}
   .hero{grid-template-columns:1fr;text-align:center;padding:18px 0 18px;gap:18px}
   .lines{align-items:center}
   .weather{width:100%;max-width:400px;margin:0 auto;text-align:left}
@@ -358,7 +370,8 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 
   <section class="hero">
     <div>
-      <div class="clock" id="clock">--:--</div>
+      <div class="clock" id="clock" title="Klicken: analog / digital">--:--</div>
+      <svg class="aclock hide" id="aclock" viewBox="0 0 200 200" role="img" aria-label="Analoge Uhr"><title>Klicken: analog / digital</title></svg>
       <div class="greet" id="greet"></div>
       <div class="date"><span id="date"></span><span id="psep" class="pdsep"></span><span class="pdate" id="pdate" lang="fa" dir="rtl"></span></div>
       <div class="lines" id="lines"></div>
@@ -615,7 +628,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   var VIEW = [
     ["weather","Wetter"], ["rainbar","Regenvorhersage"], ["events","Termine"], ["notes","Notizen & To-dos"], ["quick","Schnellzugriff"],
     ["apps","Anwendungen"], ["recent","Zuletzt geöffnet"], ["week","Wochenplan (oben)"], ["holidays","Feiertage SH"],
-    ["pdate","Persisches Datum"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["calc","Taschenrechner"], ["keys","Tastenkürzel 1–9"], ["articles","Artikel in der Suche"], ["dateconv","Datum umrechnen in der Suche"]
+    ["pdate","Persisches Datum"], ["analog","Analoge Uhr"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["calc","Taschenrechner"], ["keys","Tastenkürzel 1–9"], ["articles","Artikel in der Suche"], ["dateconv","Datum umrechnen in der Suche"]
   ];
 
   var data = null, editMode = false, query = "", sessionPw = null;
@@ -677,7 +690,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     if (!d.tools || typeof d.tools !== "object") d.tools = {};
     d.tools.names = d.tools.names || "";
     if (!d.view || typeof d.view !== "object") d.view = {};
-    VIEW.forEach(function(v){ if (typeof d.view[v[0]] !== "boolean") d.view[v[0]] = true; });
+    VIEW.forEach(function(v){ if (typeof d.view[v[0]] !== "boolean") d.view[v[0]] = v[0] !== "analog"; });
     d.sections.forEach(function(s){ s.id = s.id || uid(); s.icon = s.icon || "📁"; s.color = /^#[0-9a-f]{6}$/i.test(s.color || "") ? s.color : "#2f4fd1"; s.links.forEach(normLink); });
     return d;
   }
@@ -811,6 +824,35 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     }
     $("lines").innerHTML = L.join("");
   }
+
+  /* ================= Analoge Uhr ================= */
+  (function buildFace(){
+    var ns = "http://www.w3.org/2000/svg", svg = $("aclock"), h = '<circle class="face" cx="100" cy="100" r="96"/>';
+    for (var i = 0; i < 60; i++) {
+      var hour = i % 5 === 0, r1 = hour ? 78 : 86, a = i * 6 * Math.PI / 180;
+      h += '<line class="tk ' + (hour ? 'h' : 'm') + '" x1="' + (100 + r1 * Math.sin(a)).toFixed(2) + '" y1="' + (100 - r1 * Math.cos(a)).toFixed(2) + '" x2="' + (100 + 90 * Math.sin(a)).toFixed(2) + '" y2="' + (100 - 90 * Math.cos(a)).toFixed(2) + '"/>';
+    }
+    h += '<line class="hh" id="aH" x1="100" y1="112" x2="100" y2="52"/><line class="mh" id="aM" x1="100" y1="114" x2="100" y2="22"/>' +
+         '<line class="sh" id="aS" x1="100" y1="122" x2="100" y2="16"/><circle class="hub" cx="100" cy="100" r="4"/>';
+    svg.insertAdjacentHTML("beforeend", h);
+  })();
+  var aRaf = null;
+  function aTick(){
+    var n = new Date(), ms = n.getMilliseconds(), s = n.getSeconds() + ms / 1000, m = n.getMinutes() + s / 60, h = (n.getHours() % 12) + m / 60;
+    $("aH").setAttribute("transform", "rotate(" + (h * 30).toFixed(2) + " 100 100)");
+    $("aM").setAttribute("transform", "rotate(" + (m * 6).toFixed(2) + " 100 100)");
+    $("aS").setAttribute("transform", "rotate(" + (s * 6).toFixed(2) + " 100 100)");
+    aRaf = window.requestAnimationFrame ? requestAnimationFrame(aTick) : setTimeout(aTick, 1000);
+  }
+  function applyClock(){
+    var an = on("analog");
+    $("clock").classList.toggle("hide", an); $("aclock").classList.toggle("hide", !an);
+    if (an && aRaf == null) aTick();
+    if (!an && aRaf != null) { if (window.cancelAnimationFrame) cancelAnimationFrame(aRaf); clearTimeout(aRaf); aRaf = null; }
+  }
+  function flipClock(){ data.view.analog = !on("analog"); save(); applyClock(); }
+  $("clock").addEventListener("click", flipClock);
+  $("aclock").addEventListener("click", flipClock);
 
   /* ================= Wetter ================= */
   var WMO = {0:["Klar","☀️"],1:["Überwiegend klar","🌤️"],2:["Teilweise bewölkt","⛅"],3:["Bedeckt","☁️"],45:["Nebel","🌫️"],48:["Reifnebel","🌫️"],
@@ -1160,7 +1202,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     $("pwMenu").textContent = hasPw() ? "Passwort ändern" : "Passwort festlegen";
     $("pwOffMenu").classList.toggle("hide", !hasPw());
     $("weather").classList.toggle("hide", !on("weather"));
-    tick(); renderRecent(); renderEvents(); renderNotes(); showDirty();
+    tick(); applyClock(); renderRecent(); renderEvents(); renderNotes(); showDirty();
 
     var searching = !!query && !editMode;
     $("duo").classList.toggle("hide", searching || (!on("events") && !on("notes")));
