@@ -36,6 +36,29 @@ a{color:inherit}
 .btn.ghost{border-color:transparent;background:none}
 .btn.ghost:hover{background:var(--hover)}
 
+/* Farbschemata */
+html[data-theme="klar-hell"]{--bg:#f5f5f2;--card:#ffffff;--ink:#1d1f24;--muted:#7a7f8a;--line:#e6e5e0;--hover:#f2f1ec;--accent:#2f4fd1;--accent-ink:#ffffff;--danger:#c0392b;--warm:#e8590c;--pop:0 10px 30px -12px rgba(0,0,0,.25);color-scheme:light}
+html[data-theme="klar-dunkel"]{--bg:#121316;--card:#1a1c20;--ink:#e9eaed;--muted:#8d929c;--line:#2a2d33;--hover:#22252a;--accent:#8aa0ff;--accent-ink:#0d1120;--danger:#ff6b5b;--warm:#ff8a4c;--pop:0 10px 30px -12px rgba(0,0,0,.7);color-scheme:dark}
+html[data-theme="papier"]{--bg:#f4efe6;--card:#fbf8f2;--ink:#2b2620;--muted:#857a6c;--line:#e5dccd;--hover:#efe7da;--accent:#b5562c;--accent-ink:#ffffff;--danger:#b42318;--warm:#c2410c;--pop:0 10px 30px -12px rgba(0,0,0,.25);color-scheme:light}
+html[data-theme="salbei"]{--bg:#eef2ec;--card:#fbfcfa;--ink:#1f2a22;--muted:#6f7d72;--line:#dbe3d8;--hover:#e7ede4;--accent:#4f7a5a;--accent-ink:#ffffff;--danger:#b42318;--warm:#c96a2b;--pop:0 10px 30px -12px rgba(0,0,0,.25);color-scheme:light}
+html[data-theme="petrol"]{--bg:#eaf1f3;--card:#fafdfe;--ink:#13303a;--muted:#5d7882;--line:#d3e2e7;--hover:#e2edf0;--accent:#0a6c80;--accent-ink:#ffffff;--danger:#b42318;--warm:#d9822b;--pop:0 10px 30px -12px rgba(0,0,0,.25);color-scheme:light}
+html[data-theme="lavendel"]{--bg:#f1f0f7;--card:#fcfbff;--ink:#24223a;--muted:#77738f;--line:#e0ddef;--hover:#ebe9f5;--accent:#6750a4;--accent-ink:#ffffff;--danger:#b42318;--warm:#d0663a;--pop:0 10px 30px -12px rgba(0,0,0,.25);color-scheme:light}
+html[data-theme="nacht"]{--bg:#0e1424;--card:#161d31;--ink:#e6e9f2;--muted:#8a93ab;--line:#252e47;--hover:#1d2540;--accent:#7aa2ff;--accent-ink:#0b1020;--danger:#ff6b6b;--warm:#ffb067;--pop:0 10px 30px -12px rgba(0,0,0,.7);color-scheme:dark}
+html[data-theme="graphit"]{--bg:#161616;--card:#1f1f1f;--ink:#ececec;--muted:#9a9a9a;--line:#2e2e2e;--hover:#282828;--accent:#e0b45a;--accent-ink:#1a1406;--danger:#ff6b6b;--warm:#ff8a4c;--pop:0 10px 30px -12px rgba(0,0,0,.7);color-scheme:dark}
+html[data-theme="wald"]{--bg:#0f1a15;--card:#16241d;--ink:#e3ece6;--muted:#8aa195;--line:#24372d;--hover:#1c2d24;--accent:#6fcf97;--accent-ink:#08140d;--danger:#ff7b72;--warm:#f2a65a;--pop:0 10px 30px -12px rgba(0,0,0,.7);color-scheme:dark}
+.themes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.th{border:2px solid transparent;border-radius:12px;padding:6px;background:none;cursor:pointer;text-align:left;color:var(--ink)}
+.th:hover{background:var(--hover)}
+.th.cur{border-color:var(--accent)}
+.th .pv{height:62px;border-radius:9px;position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(127,127,127,.25)}
+.th .pv i{position:absolute;left:10px;top:12px;right:28px;bottom:12px;border-radius:6px}
+.th .pv b{position:absolute;right:9px;top:12px;width:12px;height:12px;border-radius:50%}
+.th .pv u{position:absolute;left:18px;top:22px;width:44%;height:5px;border-radius:3px;opacity:.85}
+.th .pv s{position:absolute;left:18px;top:33px;width:30%;height:4px;border-radius:3px;opacity:.45}
+.th span{display:block;font-size:.86rem;margin-top:5px;padding-left:2px}
+.th small{color:var(--muted);font-size:.74rem}
+@media (max-width:560px){.themes{grid-template-columns:repeat(2,1fr)}}
+
 /* Kopf */
 .top{display:flex;align-items:center;justify-content:space-between;gap:10px;height:36px}
 .brand{font-weight:700;font-size:.88rem;letter-spacing:.04em;color:var(--muted)}
@@ -49,7 +72,7 @@ a{color:inherit}
 .dotwarn{position:relative}
 .dotwarn::after{content:"";position:absolute;top:5px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--warm)}
 
-.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:26px 0 24px;border-bottom:1px solid var(--line)}
+.hero{display:grid;grid-template-columns:1fr auto auto;gap:24px;align-items:center;padding:26px 0 24px;border-bottom:1px solid var(--line)}
 .clock{font-size:clamp(3rem,7vw,4.4rem);font-weight:200;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
 .clock,.aclock{cursor:pointer}
 .aclock{width:150px;height:150px;display:block}
@@ -68,6 +91,25 @@ a{color:inherit}
 .lines{margin-top:10px;display:flex;flex-direction:column;gap:3px;font-size:.93rem;color:var(--muted)}
 .lines b{color:var(--ink);font-weight:600}
 .lines .now b{color:var(--accent)}
+
+/* Monatskalender */
+.mcal{width:252px;font-size:.82rem;font-variant-numeric:tabular-nums;align-self:center}
+.mc-h{display:flex;align-items:center;gap:2px;margin-bottom:4px}
+.mc-h b{flex:1;font-weight:600;font-size:.92rem;cursor:pointer;padding:2px 4px;border-radius:6px}
+.mc-h b:hover{background:var(--hover)}
+.mc-h .ib{min-width:26px;height:26px}
+.mc-g{display:grid;grid-template-columns:30px repeat(7,1fr);gap:1px;text-align:center}
+.mc-g .wd{color:var(--muted);font-size:.7rem;padding:2px 0;letter-spacing:.04em}
+.mc-g .kw{color:var(--accent);font-size:.7rem;display:grid;place-items:center;opacity:.8;border-right:1px solid var(--line)}
+.mc-g .kw.cur{opacity:1;font-weight:700}
+.mc-g .d{position:relative;height:28px;display:grid;place-items:center;border-radius:8px;cursor:pointer}
+.mc-g .d:hover{background:var(--hover)}
+.mc-g .d.o{color:var(--muted);opacity:.45}
+.mc-g .d.we{color:var(--muted)}
+.mc-g .d.hol{color:var(--warm);font-weight:600}
+.mc-g .d.t{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.mc-g .d.ev::after{content:"";position:absolute;bottom:3px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent)}
+.mc-g .d.t.ev::after{background:var(--accent-ink)}
 
 /* Wetter */
 .weather{width:300px;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:14px 16px}
@@ -313,6 +355,7 @@ body.locked .wrap{visibility:hidden}
 footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 
 @media (max-width:760px){
+  .mcal{margin:0 auto;width:min(300px,100%)}
   .aclock{margin:0 auto}
   .hero{grid-template-columns:1fr;text-align:center;padding:18px 0 18px;gap:18px}
   .lines{align-items:center}
@@ -355,6 +398,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       <div class="menu">
         <button class="ib" id="menuBtn" type="button" title="Menü">⋯</button>
         <div class="menu-list" id="menuList">
+          <button type="button" data-act="theme">Farbschema</button>
           <button type="button" data-act="view">Ansicht anpassen</button>
           <button type="button" data-act="week">Wochenplan bearbeiten</button>
           <button type="button" data-act="city">Wetter-Ort</button>
@@ -383,9 +427,10 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       <div class="clock" id="clock" title="Klicken: analog / digital">--:--</div>
       <svg class="aclock hide" id="aclock" viewBox="0 0 200 200" role="img" aria-label="Analoge Uhr"><title>Klicken: analog / digital</title></svg>
       <div class="greet" id="greet"></div>
-      <div class="date"><span id="date"></span><span id="psep" class="pdsep"></span><span class="pdate" id="pdate" lang="fa" dir="rtl"></span></div>
+      <div class="date"><span id="date"></span><span id="kwl"></span><span id="psep" class="pdsep"></span><span class="pdate" id="pdate" lang="fa" dir="rtl"></span></div>
       <div class="lines" id="lines"></div>
     </div>
+    <div class="mcal" id="mcal"></div>
     <div class="weather" id="weather"><div class="w-msg">Wetter wird geladen …</div></div>
   </section>
 
@@ -515,6 +560,15 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     <div class="wklist" id="wklist"></div>
     <button class="btn ghost" type="button" id="wkAdd">＋ Zeile</button>
     <div class="acts"><button class="btn ghost" type="button" data-close>Abbrechen</button><button class="btn primary" type="button" id="wkSave">Speichern</button></div>
+  </div>
+</dialog>
+
+<!-- Farbschema -->
+<dialog id="themeDlg" style="width:min(560px,calc(100vw - 24px))">
+  <div class="dlg">
+    <h2>Farbschema</h2>
+    <div class="themes" id="themes"></div>
+    <div class="acts"><button class="btn primary" type="button" data-close>Fertig</button></div>
   </div>
 </dialog>
 
@@ -677,7 +731,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   var VIEW = [
     ["weather","Wetter"], ["rainbar","Regenvorhersage"], ["events","Termine"], ["notes","Notizen & To-dos"], ["quick","Schnellzugriff"],
     ["apps","Anwendungen"], ["recent","Zuletzt geöffnet"], ["week","Wochenplan (oben)"], ["holidays","Feiertage SH"],
-    ["pdate","Persisches Datum"], ["analog","Analoge Uhr"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["calc","Taschenrechner"], ["keys","Tastenkürzel 1–9"], ["articles","Artikel in der Suche"], ["dateconv","Datum umrechnen in der Suche"]
+    ["pdate","Persisches Datum"], ["minical","Monatskalender mit KW"], ["analog","Analoge Uhr"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["calc","Taschenrechner"], ["keys","Tastenkürzel 1–9"], ["articles","Artikel in der Suche"], ["dateconv","Datum umrechnen in der Suche"]
   ];
 
   var data = null, editMode = false, query = "", sessionPw = null;
@@ -845,6 +899,9 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     var g = h < 5 ? "Gute Nacht" : h < 11 ? "Guten Morgen" : h < 14 ? "Guten Mittag" : h < 18 ? "Guten Tag" : h < 22 ? "Guten Abend" : "Gute Nacht";
     if (!data) return;
     $("greet").textContent = g + (data.name ? ", " + data.name : "");
+    $("kwl").textContent = " · KW " + isoWeek(n);
+    if (data.view && data.view.theme === "auto") applyTheme();
+    if (mcDay !== ymd(n)) { mcDay = ymd(n); if (data) renderCal(); }
     var showP = on("pdate") && pfmt; $("pdate").textContent = showP ? pfmt.format(n) : ""; $("psep").textContent = showP ? " · " : "";
     renderLines();
   }
@@ -873,6 +930,94 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     }
     $("lines").innerHTML = L.join("");
   }
+
+  /* ================= Farbschemata ================= */
+  var THEME_PV = {"klar-hell": ["#f5f5f2", "#ffffff", "#1d1f24", "#2f4fd1"], "klar-dunkel": ["#121316", "#1a1c20", "#e9eaed", "#8aa0ff"], "papier": ["#f4efe6", "#fbf8f2", "#2b2620", "#b5562c"], "salbei": ["#eef2ec", "#fbfcfa", "#1f2a22", "#4f7a5a"], "petrol": ["#eaf1f3", "#fafdfe", "#13303a", "#0a6c80"], "lavendel": ["#f1f0f7", "#fcfbff", "#24223a", "#6750a4"], "nacht": ["#0e1424", "#161d31", "#e6e9f2", "#7aa2ff"], "graphit": ["#161616", "#1f1f1f", "#ececec", "#e0b45a"], "wald": ["#0f1a15", "#16241d", "#e3ece6", "#6fcf97"]};
+  var THEMES = [
+    ["system","Klar","folgt dem System"], ["auto","Auto","hell am Tag, dunkel nachts"],
+    ["papier","Papier","warm, hell"], ["salbei","Salbei","grün, hell"], ["petrol","Petrol","blau-grün, hell"], ["lavendel","Lavendel","violett, hell"],
+    ["nacht","Nacht","dunkelblau"], ["graphit","Graphit","dunkel, gold"], ["wald","Wald","dunkelgrün"]
+  ];
+  function sunTimes(){
+    try { var c = JSON.parse(ls(WX_KEY)), dd = c && c.d && c.d.daily; if (dd && dd.sunrise && dd.sunset) return [dd.sunrise[0].slice(11, 16), dd.sunset[0].slice(11, 16)]; } catch(e){}
+    return ["07:00", "19:00"];
+  }
+  function themeKey(){
+    var t = (data && data.view && data.view.theme) || "system";
+    if (t === "system") return null;
+    if (t === "auto") { var st = sunTimes(), now = hm(new Date()); return now >= st[0] && now < st[1] ? "klar-hell" : "klar-dunkel"; }
+    return THEME_PV[t] ? t : null;
+  }
+  function applyTheme(){
+    var k = themeKey(), root = document.documentElement;
+    if (k) root.setAttribute("data-theme", k); else root.removeAttribute("data-theme");
+  }
+  function pvColors(key){
+    if (key === "system") return window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? THEME_PV["klar-dunkel"] : THEME_PV["klar-hell"];
+    if (key === "auto") return THEME_PV["klar-hell"];
+    return THEME_PV[key];
+  }
+  function openThemes(){
+    var cur = (data.view && data.view.theme) || "system";
+    $("themes").innerHTML = THEMES.map(function(t){
+      var c = pvColors(t[0]), half = t[0] === "auto" ? '<i style="background:' + THEME_PV["klar-dunkel"][1] + ';left:50%;right:28px;border-radius:0 6px 6px 0"></i>' : '';
+      var bg = t[0] === "auto" ? 'linear-gradient(90deg,' + THEME_PV["klar-hell"][0] + ' 50%,' + THEME_PV["klar-dunkel"][0] + ' 50%)' : c[0];
+      return '<button type="button" class="th' + (t[0] === cur ? ' cur' : '') + '" data-th="' + t[0] + '"><div class="pv" style="background:' + bg + '">' +
+        '<i style="background:' + c[1] + '"></i>' + half + '<b style="background:' + c[3] + '"></b><u style="background:' + c[2] + '"></u><s style="background:' + c[2] + '"></s></div>' +
+        '<span>' + t[1] + '<br><small>' + t[2] + '</small></span></button>';
+    }).join("");
+    $("themeDlg").showModal();
+  }
+  $("themes").addEventListener("click", function(e){
+    var b = e.target.closest("[data-th]"); if (!b) return;
+    data.view.theme = b.dataset.th; save(); applyTheme();
+    [].forEach.call($("themes").children, function(x){ x.classList.toggle("cur", x === b); });
+  });
+
+  /* ================= Monatskalender mit KW ================= */
+  function isoWeek(d){
+    var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    var day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day);
+    var y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+    return Math.ceil(((t - y0) / 86400000 + 1) / 7);
+  }
+  var mcOff = 0, mcDay = "";
+  function holMap(y){ var m = {}; holidays(y - 1).concat(holidays(y), holidays(y + 1)).forEach(function(h){ m[h[0]] = h[1]; }); return m; }
+  function renderCal(){
+    if (!on("minical")) return;
+    var now = new Date(), base = new Date(now.getFullYear(), now.getMonth() + mcOff, 1), y = base.getFullYear(), mo = base.getMonth();
+    var start = new Date(y, mo, 1 - ((base.getDay() || 7) - 1)), hol = holMap(y), td = todayStr();
+    var evDays = {}; (data.events || []).forEach(function(ev){ (evDays[ev.date] = evDays[ev.date] || []).push((ev.allDay ? "" : ev.start + " ") + ev.title); });
+    var h = '<div class="mc-h"><b id="mcT" title="Zu heute">' + base.toLocaleDateString("de-DE", {month:"long", year:"numeric"}) + '</b>' +
+      '<button class="ib" type="button" data-mc="-1" title="Voriger Monat">‹</button><button class="ib" type="button" data-mc="1" title="Nächster Monat">›</button></div>' +
+      '<div class="mc-g"><span class="wd">KW</span>' + DAYS.map(function(d){ return '<span class="wd">' + d + '</span>'; }).join("");
+    var d = new Date(start), weeks = 0;
+    while (weeks < 6) {
+      var rowEnd = new Date(d); rowEnd.setDate(rowEnd.getDate() + 6);
+      var curRow = ymd(d) <= td && td <= ymd(rowEnd);
+      h += '<span class="kw' + (curRow ? ' cur' : '') + '" title="Kalenderwoche ' + isoWeek(d) + '">' + isoWeek(d) + '</span>';
+      for (var i = 0; i < 7; i++) {
+        var ds = ymd(d), cls = ["d"], tip = [];
+        if (d.getMonth() !== mo) cls.push("o");
+        if (i >= 5) cls.push("we");
+        if (hol[ds]) { cls.push("hol"); tip.push(hol[ds]); }
+        if (evDays[ds]) { cls.push("ev"); tip = tip.concat(evDays[ds]); }
+        if (ds === td) cls.push("t");
+        h += '<span class="' + cls.join(" ") + '" data-day="' + ds + '"' + (tip.length ? ' title="' + esc(tip.join(" · ")) + '"' : '') + '>' + d.getDate() + '</span>';
+        d.setDate(d.getDate() + 1);
+      }
+      weeks++;
+      if (weeks >= 5 && d.getMonth() !== mo) break;
+    }
+    $("mcal").innerHTML = h + '</div>';
+  }
+  $("mcal").addEventListener("click", function(e){
+    var b = e.target.closest("[data-mc]");
+    if (b) { mcOff += +b.dataset.mc; renderCal(); return; }
+    if (e.target.id === "mcT") { mcOff = 0; renderCal(); return; }
+    var dd = e.target.closest("[data-day]");
+    if (dd && on("events")) { openEv(null); F($("evForm"), "d").value = dd.dataset.day; }
+  });
 
   /* ================= Analoge Uhr ================= */
   (function buildFace(){
@@ -1339,7 +1484,9 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     $("pwMenu").textContent = hasPw() ? "Passwort ändern" : "Passwort festlegen";
     $("pwOffMenu").classList.toggle("hide", !hasPw());
     $("weather").classList.toggle("hide", !on("weather"));
-    tick(); applyClock(); renderRecent(); renderEvents(); renderNotes(); showDirty();
+    $("mcal").classList.toggle("hide", !on("minical"));
+    renderCal();
+    applyTheme(); tick(); applyClock(); renderRecent(); renderEvents(); renderNotes(); showDirty();
 
     var searching = !!query && !editMode;
     $("duo").classList.toggle("hide", searching || (!on("events") && !on("notes")));
@@ -1839,6 +1986,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     $("menuList").classList.remove("open");
     switch (b.dataset.act) {
       case "view": openView(); break;
+      case "theme": openThemes(); break;
       case "vault": openVaultSetup(); break;
       case "week": openWeek(); break;
       case "city": setCity(); break;
@@ -1894,7 +2042,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   (function start(){
     var local = loadLocal();
     if (local) {
-      data = local;
+      data = local; applyTheme();
       if (ls(DIRTY_KEY) == null) fetchServer().then(function(raw){ ls(DIRTY_KEY, raw ? "0" : "1"); showDirty(); });
       if (hasPw() && !isUnlocked()) { tick(); showLock("local"); return; }
       boot(); return;
