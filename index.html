@@ -289,6 +289,15 @@ dialog.big:fullscreen .qrgen .qrc img,dialog.big:fullscreen .qrgen .qrc canvas{w
 .fa{font-family:Vazirmatn,Tahoma,sans-serif;direction:rtl;unicode-bidi:isolate}
 @media (max-width:560px){.qrgen,.dconv{grid-template-columns:1fr}.qrgen .qrc{justify-self:center}}
 
+/* Geschützte Apps */
+dialog.app{width:100vw;max-width:none;height:100vh;max-height:none;margin:0;border:0;border-radius:0;padding:0}
+dialog.app[open]{display:flex;flex-direction:column}
+.apphead{display:flex;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid var(--line);background:var(--card)}
+.apphead b{flex:1;font-size:.9rem;color:var(--muted);font-weight:600}
+dialog.app iframe{flex:1;border:0;width:100%;background:#fff}
+.qt .lockmark{position:absolute;top:6px;right:8px;font-size:.7rem;opacity:.6}
+.vfiles{font-size:.82rem;color:var(--muted);margin:-6px 0 10px}
+
 /* Sperre */
 #lock{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:16px;background:var(--bg)}
 body.locked #lock{display:grid}
@@ -355,6 +364,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
           <button type="button" data-act="import">Importieren …</button>
           <button type="button" data-act="server">Aus Repo laden</button>
           <hr>
+          <button type="button" data-act="vault">Geschützte App einrichten</button>
           <button type="button" data-act="pw" id="pwMenu">Passwort festlegen</button>
           <button type="button" data-act="pwOff" id="pwOffMenu" class="hide">Passwort entfernen</button>
           <button type="button" data-act="clearRecent">„Zuletzt“ leeren</button>
@@ -611,6 +621,45 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     </div>
     <div class="qrbox"><h3 id="qrT"></h3><div class="qrc" id="qrC"></div><code id="qrU"></code></div>
   </div>
+</dialog>
+
+<!-- Geschützte App einrichten -->
+<dialog id="vaultDlg">
+  <form method="dialog" id="vaultForm" autocomplete="off">
+    <h2>Geschützte App einrichten</h2>
+    <p>Die HTML-Datei wird mit einem eigenen Passwort verschlüsselt. Ins Repo kommt nur die verschlüsselte Datei.</p>
+    <div class="row">
+      <label class="fld"><span>Name der Kachel</span><input type="text" name="title" required maxlength="40" value="Rechnungen"></label>
+      <label class="fld" style="flex:0 0 80px"><span>Symbol</span><input type="text" name="icon" maxlength="4" value="🧾"></label>
+    </div>
+    <label class="fld"><span>HTML-Datei (z. B. rechnung-generator.html)</span><input type="file" name="html" accept=".html,.htm,text/html" required></label>
+    <label class="fld"><span>Bilder dazu, optional (z. B. Unterschrift)</span><input type="file" name="assets" multiple accept="image/*"></label>
+    <div class="vfiles" id="vFiles"></div>
+    <label class="fld"><span>Dateiname im Repo</span><input type="text" name="file" required value="rechnung.vault"></label>
+    <div class="row">
+      <label class="fld"><span>Passwort</span><input type="password" name="pw1" autocomplete="new-password"></label>
+      <label class="fld"><span>Wiederholen</span><input type="password" name="pw2" autocomplete="new-password"></label>
+    </div>
+    <div class="err" id="vErr"></div>
+    <div class="acts"><button class="btn ghost" type="button" data-close>Abbrechen</button><button class="btn primary" type="submit">Verschlüsseln &amp; laden</button></div>
+  </form>
+</dialog>
+
+<!-- Geschützte App öffnen -->
+<dialog id="vaultPw">
+  <form method="dialog" id="vaultPwForm" autocomplete="off">
+    <h2 id="vpT">Geschützt</h2>
+    <label class="fld"><input type="password" name="pw" placeholder="Passwort" autocomplete="current-password"></label>
+    <div class="err" id="vpErr"></div>
+    <div class="acts"><button class="btn ghost" type="button" data-close>Abbrechen</button><button class="btn primary" type="submit">Öffnen</button></div>
+  </form>
+</dialog>
+<dialog id="appDlg" class="app">
+  <div class="apphead"><b id="appT"></b>
+    <button class="ib" type="button" id="appTab" title="In neuem Tab öffnen">↗</button>
+    <button class="ib" type="button" id="appClose" title="Schließen und sperren">✕</button>
+  </div>
+  <iframe id="appFrame" title="Geschützte Anwendung"></iframe>
 </dialog>
 
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
@@ -1179,6 +1228,94 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     var a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = "qr-code.png"; document.body.appendChild(a); a.click(); a.remove();
   });
 
+  /* ================= Geschützte Apps (verschlüsselt) ================= */
+  var VCACHE = "zentrale.vault.";
+  function isVault(l){ return l && /^vault:/i.test(l.url || ""); }
+  function vaultFile(l){ return (l.url || "").replace(/^vault:/i, "").trim(); }
+  function readFile(f, asData){
+    return new Promise(function(res, rej){ var r = new FileReader(); r.onload = function(){ res(r.result); }; r.onerror = rej; if (asData) r.readAsDataURL(f); else r.readAsText(f); });
+  }
+  function reEsc(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+  function openVaultSetup(){
+    var f = $("vaultForm"); f.reset(); F(f, "title").value = "Rechnungen"; F(f, "icon").value = "🧾"; F(f, "file").value = "rechnung.vault";
+    $("vErr").textContent = ""; $("vFiles").textContent = ""; $("vaultDlg").showModal();
+  }
+  F($("vaultForm"), "assets").addEventListener("change", function(e){
+    $("vFiles").textContent = [].map.call(e.target.files, function(x){ return x.name; }).join(", ");
+  });
+  $("vaultForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var f = e.target, title = F(f, "title").value.trim(), icon = F(f, "icon").value.trim(), file = F(f, "file").value.trim().replace(/[^\w.\-]/g, ""),
+        html = F(f, "html").files[0], assets = [].slice.call(F(f, "assets").files), p1 = F(f, "pw1").value, p2 = F(f, "pw2").value;
+    if (!html) { $("vErr").textContent = "Bitte die HTML-Datei wählen."; return; }
+    if (p1.length < 6) { $("vErr").textContent = "Passwort: mindestens 6 Zeichen."; return; }
+    if (p1 !== p2) { $("vErr").textContent = "Passwörter stimmen nicht überein."; return; }
+    if (!/\.vault$/.test(file)) file += ".vault";
+    $("vErr").textContent = "Verschlüssele …";
+    readFile(html).then(function(src){
+      return Promise.all(assets.map(function(a){ return readFile(a, true).then(function(d){ return {name:a.name, data:d}; }); })).then(function(list){
+        var used = 0;
+        list.forEach(function(a){
+          var re = new RegExp("([\"'(=])((?:\\.\\/)?(?:[^\"'()\\s]*\\/)?)" + reEsc(a.name) + "([\"')\\s>])", "g");
+          src = src.replace(re, function(m, p, path, q){ used++; return p + a.data + q; });
+        });
+        return encryptObj({app:"zentrale-vault", v:1, title:title, html:src}, p1).then(function(pack){
+          var txt = JSON.stringify(pack);
+          dl(txt, "application/octet-stream", file);
+          ls(VCACHE + file, txt);
+          var link = data.quick.filter(function(l){ return isVault(l) && vaultFile(l) === file; })[0];
+          if (link) { link.title = title; link.icon = icon; }
+          else data.quick.unshift({id:uid(), title:title, url:"vault:" + file, icon:icon, kind:"sonst", note:"", newTab:false});
+          save(); render(); $("vaultDlg").close();
+          toast((list.length ? used + " Bildverweis(e) eingebettet · " : "") + file + " ins Repo (Ordner home) hochladen");
+        });
+      });
+    }).catch(function(){ $("vErr").textContent = "Datei konnte nicht gelesen werden."; });
+  });
+
+  var vaultCur = null, appBlob = null;
+  function getVault(file){
+    var cached = ls(VCACHE + file);
+    return fetch(file + "?ts=" + Date.now(), {cache:"no-store"}).then(function(r){ return r.ok ? r.text() : null; }).catch(function(){ return null; })
+      .then(function(txt){
+        var pack = null;
+        try { pack = txt ? JSON.parse(txt) : null; } catch(e){ pack = null; }
+        if (isEnc(pack)) { ls(VCACHE + file, txt); return pack; }
+        try { pack = cached ? JSON.parse(cached) : null; } catch(e){ pack = null; }
+        return isEnc(pack) ? pack : null;
+      });
+  }
+  function openVault(l){
+    vaultCur = l;
+    $("vpT").textContent = "🔒 " + l.title; $("vpErr").textContent = ""; F($("vaultPwForm"), "pw").value = "";
+    $("vaultPw").showModal(); setTimeout(function(){ F($("vaultPwForm"), "pw").focus(); }, 30);
+  }
+  $("vaultPwForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var f = e.target, pw = F(f, "pw").value, l = vaultCur; if (!pw || !l) return;
+    $("vpErr").textContent = "Entschlüssele …";
+    getVault(vaultFile(l)).then(function(pack){
+      if (!pack) { $("vpErr").textContent = "Datei „" + vaultFile(l) + "“ nicht gefunden."; return; }
+      return decryptObj(pack, pw).then(function(obj){
+        if (!obj || obj.app !== "zentrale-vault" || typeof obj.html !== "string") throw 0;
+        $("vaultPw").close();
+        $("appT").textContent = obj.title || l.title;
+        $("appFrame").srcdoc = obj.html;
+        if (appBlob) URL.revokeObjectURL(appBlob);
+        appBlob = URL.createObjectURL(new Blob([obj.html], {type:"text/html"}));
+        $("appDlg").showModal();
+      }, function(){ $("vpErr").textContent = "Falsches Passwort."; f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake"); F(f, "pw").select(); });
+    });
+  });
+  function closeApp(){
+    $("appFrame").srcdoc = ""; $("appFrame").removeAttribute("srcdoc"); $("appFrame").src = "about:blank";
+    if (appBlob) { URL.revokeObjectURL(appBlob); appBlob = null; }
+    if ($("appDlg").open) $("appDlg").close();
+  }
+  $("appClose").addEventListener("click", closeApp);
+  $("appDlg").addEventListener("cancel", function(e){ e.preventDefault(); });
+  $("appTab").addEventListener("click", function(){ if (appBlob) window.open(appBlob, "_blank"); });
+
   /* ================= Rendern ================= */
   function matches(l, extra){ return (l.title + " " + l.url + " " + l.note + " " + (extra || "")).toLowerCase().indexOf(query.toLowerCase()) !== -1; }
   function iconHtml(l){
@@ -1214,7 +1351,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     data.quick.forEach(function(l, i){
       qShown++;
       qh += '<a class="qt" href="' + esc(l.url) + '"' + (l.newTab ? ' target="_blank" rel="noopener"' : '') + ' data-s="q" data-l="' + i + '" title="' + esc(l.url) + '">' +
-        (on("keys") && i < 9 ? '<span class="qk">' + (i + 1) + '</span>' : '') + iconHtml(l) + '<span class="qn">' + esc(l.title) + '</span>' +
+        (on("keys") && i < 9 ? '<span class="qk">' + (i + 1) + '</span>' : '') + (isVault(l) ? '<span class="lockmark">🔒</span>' : '') + iconHtml(l) + '<span class="qn">' + esc(l.title) + '</span>' +
         '<span class="qed"><button class="ib" type="button" data-a="lUp" data-s="q" data-l="' + i + '" title="Nach links">‹</button><button class="ib" type="button" data-a="lDown" data-s="q" data-l="' + i + '" title="Nach rechts">›</button><button class="ib" type="button" data-a="lDel" data-s="q" data-l="' + i + '" title="Löschen">✕</button></span></a>';
     });
     qh += '<button class="qadd" type="button" data-a="lAdd" data-s="q">＋</button>';
@@ -1626,6 +1763,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     if (a && !b) {
       var k = keyOf(a.dataset.s), l = list(k)[+a.dataset.l];
       if (editMode) { e.preventDefault(); openLink(k, +a.dataset.l); return; }
+      if (isVault(l)) { e.preventDefault(); openVault(l); return; }
       pushRecent(l, k === "q" ? "#2f4fd1" : data.sections[k].color);
       return;
     }
@@ -1659,7 +1797,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       if (searchCalc != null) { if (navigator.clipboard) navigator.clipboard.writeText(fmtNum(searchCalc)).then(function(){ toast("Ergebnis kopiert"); }); return; }
       var qi = -1; data.quick.some(function(l, i){ if (matches(l)) { qi = i; return true; } return false; });
       var first = qi >= 0 ? document.querySelector('#quick a[data-l="' + qi + '"]') : document.querySelector("#grid a[data-l]");
-      if (first) first.click(); else location.href = "https://www.google.com/search?q=" + encodeURIComponent(query);
+      if (first) { var fl = first.dataset.s === "q" ? data.quick[+first.dataset.l] : null; if (fl && isVault(fl)) { openVault(fl); return; } first.click(); } else location.href = "https://www.google.com/search?q=" + encodeURIComponent(query);
     }
     if (e.key === "Escape") { e.target.value = ""; query = ""; render(); artLookup(""); e.target.blur(); }
   });
@@ -1668,6 +1806,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     if (e.key === "/") { e.preventDefault(); $("q").focus(); return; }
     if (on("keys") && on("quick") && /^[1-9]$/.test(e.key)) {
       var l = data.quick[+e.key - 1]; if (!l) return;
+      if (isVault(l)) { openVault(l); return; }
       pushRecent(l, "#2f4fd1");
       if (l.newTab) window.open(l.url, "_blank", "noopener"); else location.href = l.url;
     }
@@ -1700,6 +1839,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     $("menuList").classList.remove("open");
     switch (b.dataset.act) {
       case "view": openView(); break;
+      case "vault": openVaultSetup(); break;
       case "week": openWeek(); break;
       case "city": setCity(); break;
       case "title":
