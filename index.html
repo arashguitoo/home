@@ -72,10 +72,10 @@ html[data-theme="wald"]{--bg:#0f1a15;--card:#16241d;--ink:#e3ece6;--muted:#8aa19
 .dotwarn{position:relative}
 .dotwarn::after{content:"";position:absolute;top:5px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--warm)}
 
-.hero{display:grid;grid-template-columns:1fr auto auto;gap:24px;align-items:center;padding:26px 0 24px;border-bottom:1px solid var(--line)}
+.hero{display:grid;grid-template-columns:minmax(210px,1fr) minmax(280px,330px) 300px;gap:36px;align-items:center;padding:26px 0 24px;border-bottom:1px solid var(--line)}
 .clock{font-size:clamp(3rem,7vw,4.4rem);font-weight:200;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
 .clock,.aclock{cursor:pointer}
-.aclock{width:150px;height:150px;display:block}
+.aclock{width:128px;height:128px;display:block}
 .aclock .face{fill:var(--card);stroke:var(--line);stroke-width:1.5}
 .aclock .tk{stroke:var(--muted);stroke-linecap:round}
 .aclock .tk.h{stroke:var(--ink);stroke-width:3}
@@ -87,13 +87,14 @@ html[data-theme="wald"]{--bg:#0f1a15;--card:#16241d;--ink:#e3ece6;--muted:#8aa19
 .aclock .hub{fill:var(--warm)}
 .greet{font-size:1.25rem;font-weight:600;margin-top:8px}
 .date{color:var(--muted)}
-.pdate{font-family:Vazirmatn,Tahoma,sans-serif;unicode-bidi:isolate;font-size:.92rem}
+.pdate{font-family:Vazirmatn,Tahoma,sans-serif;unicode-bidi:isolate;font-size:.92rem;white-space:nowrap;display:inline-block}
+#kwl{white-space:nowrap}
 .lines{margin-top:10px;display:flex;flex-direction:column;gap:3px;font-size:.93rem;color:var(--muted)}
 .lines b{color:var(--ink);font-weight:600}
 .lines .now b{color:var(--accent)}
 
 /* Monatskalender */
-.mcal{width:252px;font-size:.82rem;font-variant-numeric:tabular-nums;align-self:center}
+.mcal{width:100%;text-align:left;font-size:.86rem;font-variant-numeric:tabular-nums;align-self:center}
 .mc-h{display:flex;align-items:center;gap:2px;margin-bottom:4px}
 .mc-h b{flex:1;font-weight:600;font-size:.92rem;cursor:pointer;padding:2px 4px;border-radius:6px}
 .mc-h b:hover{background:var(--hover)}
@@ -102,7 +103,7 @@ html[data-theme="wald"]{--bg:#0f1a15;--card:#16241d;--ink:#e3ece6;--muted:#8aa19
 .mc-g .wd{color:var(--muted);font-size:.7rem;padding:2px 0;letter-spacing:.04em}
 .mc-g .kw{color:var(--accent);font-size:.7rem;display:grid;place-items:center;opacity:.8;border-right:1px solid var(--line)}
 .mc-g .kw.cur{opacity:1;font-weight:700}
-.mc-g .d{position:relative;height:28px;display:grid;place-items:center;border-radius:8px;cursor:pointer}
+.mc-g .d{position:relative;height:31px;display:grid;place-items:center;border-radius:8px;cursor:pointer}
 .mc-g .d:hover{background:var(--hover)}
 .mc-g .d.o{color:var(--muted);opacity:.45}
 .mc-g .d.we{color:var(--muted)}
@@ -110,6 +111,33 @@ html[data-theme="wald"]{--bg:#0f1a15;--card:#16241d;--ink:#e3ece6;--muted:#8aa19
 .mc-g .d.t{background:var(--accent);color:var(--accent-ink);font-weight:700}
 .mc-g .d.ev::after{content:"";position:absolute;bottom:3px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent)}
 .mc-g .d.t.ev::after{background:var(--accent-ink)}
+
+.mc-ev{list-style:none;margin:8px 0 0;padding:8px 0 0;border-top:1px solid var(--line)}
+.mc-ev li{display:flex;gap:10px;align-items:baseline;padding:4px 6px;border-radius:7px;cursor:pointer;font-size:.86rem}
+.mc-ev li:hover{background:var(--hover)}
+.mc-ev .w{color:var(--accent);font-weight:600;min-width:64px;font-variant-numeric:tabular-nums}
+.mc-ev .x{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-ev .x small{color:var(--muted)}
+.mc-ev li.tdy .w{color:var(--warm)}
+.mc-ev .more{color:var(--muted);cursor:default}
+.mc-ev .more:hover{background:none}
+
+/* Notizen-Seitenleiste */
+.nbtn{position:relative}
+.nb{position:absolute;top:1px;right:0;min-width:15px;height:15px;padding:0 4px;border-radius:8px;background:var(--accent);color:var(--accent-ink);font-size:.62rem;font-weight:700;line-height:15px;text-align:center}
+.nb:empty{display:none}
+.scrim{position:fixed;inset:0;background:rgba(10,12,20,.25);opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(360px,100vw);background:var(--card);border-left:1px solid var(--line);box-shadow:var(--pop);
+  transform:translateX(102%);transition:transform .22s ease;z-index:61;display:flex;flex-direction:column;padding:12px 16px 16px}
+body.notes-open .drawer{transform:none}
+body.notes-open .scrim{opacity:1;pointer-events:auto}
+.dr-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.drawer .todos{max-height:none;flex:1;overflow:auto}
+.drawer #notePane{flex:1;display:flex}
+.drawer #notePane.hide{display:none}
+.drawer .note{flex:1;min-height:0;resize:none}
+.drawer #todoPane{flex:1;display:flex;flex-direction:column;min-height:0}
+.drawer #todoPane.hide{display:none}
 
 /* Wetter */
 .weather{width:300px;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:14px 16px}
@@ -171,7 +199,6 @@ body.edit .qed{display:flex}
 body.edit .qadd{display:block}
 
 /* Karten */
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px 12px}
 .duo .card{min-height:170px;min-width:0}
 
@@ -355,7 +382,7 @@ body.locked .wrap{visibility:hidden}
 footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 
 @media (max-width:760px){
-  .mcal{margin:0 auto;width:min(300px,100%)}
+  .mcal{margin:0 auto;width:min(340px,100%)}
   .aclock{margin:0 auto}
   .hero{grid-template-columns:1fr;text-align:center;padding:18px 0 18px;gap:18px}
   .lines{align-items:center}
@@ -391,6 +418,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   <div class="top">
     <div class="brand" id="brand">Arashs Zentrale</div>
     <div class="tools">
+      <button class="ib nbtn" id="notesBtn" type="button" title="Notizen &amp; To-dos (N)">☑<span class="nb" id="nBadge"></span></button>
       <button class="ib" id="calcBtn" type="button" title="Taschenrechner">÷</button>
       <button class="ib" id="toolsBtn" type="button" title="Werkzeuge: Timer, Zufall, Gruppen">⏱</button>
       <button class="ib hide" id="lockBtn" type="button" title="Sperren">🔒</button>
@@ -443,27 +471,6 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 
   <div class="notice" id="editNotice" hidden>Bearbeiten: Links anklicken zum Ändern. Fertig? Oben ✓ – und bei Gelegenheit ⋯ → Exportieren.</div>
 
-  <div class="duo" id="duo">
-    <div class="card" id="evWrap">
-      <div class="h2"><b>Termine</b>
-        <button class="ib" type="button" id="evAll" title="Alle kommenden Termine als .ics">⤓</button>
-        <button class="ib" type="button" id="evAdd" title="Neuer Termin">＋</button>
-      </div>
-      <ul class="evlist" id="evlist"></ul>
-    </div>
-    <div class="card" id="notesWrap">
-      <div class="h2" style="gap:4px"><b style="flex:0 0 auto;margin-right:auto">Notizen</b>
-        <div class="tabs"><button class="ib cur" type="button" data-tab="todo">To-dos</button><button class="ib" type="button" data-tab="note">Notiz</button></div>
-      </div>
-      <div id="todoPane">
-        <input class="todo-in" id="todoIn" type="text" maxlength="200" placeholder="Neue Aufgabe … (Enter)">
-        <ul class="todos" id="todos"></ul>
-        <button class="clr hide" type="button" id="todoClr">Erledigte entfernen</button>
-      </div>
-      <div id="notePane" class="hide"><textarea class="note" id="note" placeholder="Schnelle Gedanken …"></textarea></div>
-    </div>
-  </div>
-
   <div id="appsWrap">
     <div class="h2"><b>Anwendungen</b></div>
     <div class="grid" id="grid"></div>
@@ -471,6 +478,21 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 
   <footer id="foot">Wetter: Open-Meteo</footer>
 </div>
+
+<!-- Notizen-Seitenleiste -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Notizen">
+  <div class="dr-h">
+    <div class="tabs"><button class="ib cur" type="button" data-tab="todo">To-dos</button><button class="ib" type="button" data-tab="note">Notiz</button></div>
+    <button class="ib" type="button" id="drClose" title="Schließen (Esc)">✕</button>
+  </div>
+  <div id="todoPane">
+    <input class="todo-in" id="todoIn" type="text" maxlength="200" placeholder="Neue Aufgabe … (Enter)">
+    <ul class="todos" id="todos"></ul>
+    <button class="clr hide" type="button" id="todoClr">Erledigte entfernen</button>
+  </div>
+  <div id="notePane" class="hide"><textarea class="note" id="note" placeholder="Schnelle Gedanken …"></textarea></div>
+</aside>
 
 <!-- Link -->
 <dialog id="linkDlg">
@@ -544,6 +566,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     <label class="fld"><span>Notiz</span><input type="text" name="note" maxlength="300"></label>
     <div class="err" id="evErr"></div>
     <div class="acts">
+      <button class="btn ghost" type="button" id="evDel" style="color:var(--danger)">Löschen</button>
       <button class="btn ghost" type="button" data-close>Abbrechen</button><span class="sp"></span>
       <button class="btn" type="submit" data-go="google" title="Speichern und in Google Kalender öffnen">+ Google</button>
       <button class="btn" type="submit" data-go="ics" title="Speichern und als Kalenderdatei laden (Outlook, Apple, Handy)">+ .ics</button>
@@ -729,7 +752,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   var SWATCH = ["#2f4fd1","#0f8a6b","#d08a12","#7b3fa0","#c2255c","#e8590c","#1098ad","#2b8a3e","#64748b"];
   var DAYS = ["Mo","Di","Mi","Do","Fr","Sa","So"];
   var VIEW = [
-    ["weather","Wetter"], ["rainbar","Regenvorhersage"], ["events","Termine"], ["notes","Notizen & To-dos"], ["quick","Schnellzugriff"],
+    ["weather","Wetter"], ["rainbar","Regenvorhersage"], ["events","Termine im Kalender"], ["notes","Notizen & To-dos"], ["quick","Schnellzugriff"],
     ["apps","Anwendungen"], ["recent","Zuletzt geöffnet"], ["week","Wochenplan (oben)"], ["holidays","Feiertage SH"],
     ["pdate","Persisches Datum"], ["minical","Monatskalender mit KW"], ["analog","Analoge Uhr"], ["qr","QR-Codes an Links"], ["tools","Werkzeuge (⏱)"], ["calc","Taschenrechner"], ["keys","Tastenkürzel 1–9"], ["articles","Artikel in der Suche"], ["dateconv","Datum umrechnen in der Suche"]
   ];
@@ -915,7 +938,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
         L.push('<div>Danach: <b>' + esc(ws.next.w.title) + '</b> · ' + when + '</div>');
       }
     }
-    if (on("events")) {
+    if (on("events") && !on("minical")) {
       var td0 = todayStr(), now = new Date();
       var todays = data.events.filter(function(ev){ return ev.date === td0 && evEnd(ev) > now; }).sort(function(a, b){ return evStart(a) - evStart(b); });
       if (todays.length) L.push('<div>Heute: <b>' + esc(todays.map(function(ev){ return (ev.allDay ? "" : ev.start + " ") + ev.title; }).join(" · ")) + '</b></div>');
@@ -1003,18 +1026,21 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
         if (hol[ds]) { cls.push("hol"); tip.push(hol[ds]); }
         if (evDays[ds]) { cls.push("ev"); tip = tip.concat(evDays[ds]); }
         if (ds === td) cls.push("t");
-        h += '<span class="' + cls.join(" ") + '" data-day="' + ds + '"' + (tip.length ? ' title="' + esc(tip.join(" · ")) + '"' : '') + '>' + d.getDate() + '</span>';
+        if (on("events")) tip.push(evDays[ds] ? "" : "Klick: neuer Termin");
+        h += '<span class="' + cls.join(" ") + '" data-day="' + ds + '"' + (tip.filter(Boolean).length ? ' title="' + esc(tip.filter(Boolean).join(" · ")) + '"' : '') + '>' + d.getDate() + '</span>';
         d.setDate(d.getDate() + 1);
       }
       weeks++;
       if (weeks >= 5 && d.getMonth() !== mo) break;
     }
-    $("mcal").innerHTML = h + '</div>';
+    $("mcal").innerHTML = h + '</div>' + evListHtml();
   }
   $("mcal").addEventListener("click", function(e){
     var b = e.target.closest("[data-mc]");
     if (b) { mcOff += +b.dataset.mc; renderCal(); return; }
     if (e.target.id === "mcT") { mcOff = 0; renderCal(); return; }
+    var li = e.target.closest("[data-ev]");
+    if (li) { openEv(+li.dataset.ev); return; }
     var dd = e.target.closest("[data-day]");
     if (dd && on("events")) { openEv(null); F($("evForm"), "d").value = dd.dataset.day; }
   });
@@ -1489,10 +1515,8 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     applyTheme(); tick(); applyClock(); renderRecent(); renderEvents(); renderNotes(); showDirty();
 
     var searching = !!query && !editMode;
-    $("duo").classList.toggle("hide", searching || (!on("events") && !on("notes")));
-    $("evWrap").classList.toggle("hide", !on("events"));
-    $("notesWrap").classList.toggle("hide", !on("notes"));
-    $("duo").style.gridTemplateColumns = (on("events") && on("notes")) ? "" : "1fr";
+    $("notesBtn").classList.toggle("hide", !on("notes"));
+    if (!on("notes")) document.body.classList.remove("notes-open");
 
     var qh = "", qShown = 0;
     data.quick.forEach(function(l, i){
@@ -1589,17 +1613,17 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     var dates = ev.allDay ? ev.date.replace(/-/g, "") + "/" + addDays(ev.date, 1).replace(/-/g, "") : utcStamp(evStart(ev)) + "/" + utcStamp(evEnd(ev));
     return "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(ev.title) + "&dates=" + dates + "&details=" + encodeURIComponent(ev.note) + "&location=" + encodeURIComponent(ev.loc);
   }
-  function renderEvents(){
-    if (!on("events")) return;
+  function renderEvents(){ /* Termine erscheinen im Monatskalender */ }
+  function evListHtml(){
+    if (!on("events")) return "";
     var up = upcoming(), td0 = todayStr();
-    $("evAll").classList.toggle("hide", up.length < 2);
-    if (!up.length) { $("evlist").innerHTML = '<li class="muted">Keine anstehenden Termine.</li>'; return; }
-    $("evlist").innerHTML = up.slice(0, 6).map(function(ev){
-      var d = evStart(ev), i = data.events.indexOf(ev);
-      return '<li class="ev' + (ev.date === td0 ? ' today' : '') + '"><div class="evd"><small>' + esc(d.toLocaleDateString("de-DE", {month:"short"}).replace(".", "")) + '</small><b>' + d.getDate() + '</b></div>' +
-        '<div class="evt"><b>' + esc(ev.title) + '</b><small>' + esc(d.toLocaleDateString("de-DE", {weekday:"short"}).replace(".", "")) + ' · ' + (ev.allDay ? "ganztägig" : ev.start + "–" + ev.end) + (ev.loc ? ' · ' + esc(ev.loc) : '') + '</small></div>' +
-        '<div class="eva"><button class="ib" type="button" data-e="ics" data-i="' + i + '" title=".ics laden">⤓</button><button class="ib" type="button" data-e="google" data-i="' + i + '" title="Google Kalender">G</button><button class="ib" type="button" data-e="edit" data-i="' + i + '" title="Bearbeiten">✎</button><button class="ib" type="button" data-e="del" data-i="' + i + '" title="Löschen">✕</button></div></li>';
-    }).join("") + (up.length > 6 ? '<li class="muted">+ ' + (up.length - 6) + ' weitere</li>' : '');
+    if (!up.length) return "";
+    return '<ul class="mc-ev">' + up.slice(0, 3).map(function(ev){
+      var d = evStart(ev), i = data.events.indexOf(ev), wd = d.toLocaleDateString("de-DE", {weekday:"short"}).replace(".", "");
+      var when = ev.date === td0 ? "heute" : wd + " " + d.getDate() + "." + (d.getMonth() + 1) + ".";
+      return '<li class="' + (ev.date === td0 ? 'tdy' : '') + '" data-ev="' + i + '" title="Bearbeiten · Google · .ics"><span class="w">' + when + '</span><span class="x">' +
+        (ev.allDay ? '' : '<small>' + ev.start + '</small> ') + esc(ev.title) + '</span></li>';
+    }).join("") + (up.length > 3 ? '<li class="more">+ ' + (up.length - 3) + ' weitere</li>' : '') + '</ul>';
   }
   var evCtx = null, evGo = "save";
   function openEv(i){
@@ -1611,6 +1635,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     F(f, "start").value = ev && !ev.allDay ? ev.start : "09:00"; F(f, "end").value = ev && !ev.allDay ? ev.end : "10:00";
     F(f, "loc").value = ev ? ev.loc : ""; F(f, "note").value = ev ? ev.note : ""; F(f, "alarm").value = String(ev ? ev.alarm : 30);
     $("evErr").textContent = ""; $("timeRow").classList.toggle("hide", F(f, "allDay").checked);
+    $("evDel").classList.toggle("hide", !ev);
     $("evDlg").showModal(); setTimeout(function(){ F(f, "title").focus(); }, 30);
   }
   F($("evForm"), "allDay").addEventListener("change", function(e){ $("timeRow").classList.toggle("hide", e.target.checked); });
@@ -1629,15 +1654,9 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     else if (evGo === "google") window.open(googleUrl(ev), "_blank", "noopener");
     evGo = "save";
   });
-  $("evAdd").addEventListener("click", function(){ openEv(null); });
-  $("evAll").addEventListener("click", function(){ dl(buildIcs(upcoming()), "text/calendar;charset=utf-8", "termine.ics"); });
-  $("evlist").addEventListener("click", function(e){
-    var b = e.target.closest("[data-e]"); if (!b) return;
-    var i = +b.dataset.i, ev = data.events[i];
-    if (b.dataset.e === "ics") dl(buildIcs([ev]), "text/calendar;charset=utf-8", safeName(ev.title) + ".ics");
-    if (b.dataset.e === "google") window.open(googleUrl(ev), "_blank", "noopener");
-    if (b.dataset.e === "edit") openEv(i);
-    if (b.dataset.e === "del" && confirm("„" + ev.title + "“ löschen?")) { data.events.splice(i, 1); save(); render(); }
+  $("evDel").addEventListener("click", function(){
+    if (evCtx == null) return;
+    if (confirm("„" + data.events[evCtx].title + "“ löschen?\n(Bereits übernommene Kalendereinträge bleiben bestehen.)")) { data.events.splice(evCtx, 1); save(); $("evDlg").close(); render(); }
   });
 
   /* ================= Notizen & To-dos ================= */
@@ -1648,8 +1667,15 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       return '<li class="td' + (x.done ? ' done' : '') + '"><input type="checkbox" data-i="' + i + '"' + (x.done ? ' checked' : '') + '><span>' + esc(x.t) + '</span><button class="ib" type="button" data-del="' + i + '" title="Löschen">✕</button></li>';
     }).join("");
     $("todoClr").classList.toggle("hide", !t.some(function(x){ return x.done; }));
+    var open = t.filter(function(x){ return !x.done; }).length; $("nBadge").textContent = open ? open : "";
     if (document.activeElement !== $("note")) $("note").value = data.notes.text;
   }
+  function openNotes(){ document.body.classList.add("notes-open"); setTimeout(function(){ ($("notePane").classList.contains("hide") ? $("todoIn") : $("note")).focus(); }, 220); }
+  function closeNotes(){ document.body.classList.remove("notes-open"); }
+  $("notesBtn").addEventListener("click", function(){ document.body.classList.contains("notes-open") ? closeNotes() : openNotes(); });
+  $("drClose").addEventListener("click", closeNotes);
+  $("scrim").addEventListener("click", closeNotes);
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && document.body.classList.contains("notes-open") && !document.querySelector("dialog[open]")) closeNotes(); });
   $("todoIn").addEventListener("keydown", function(e){
     if (e.key !== "Enter") return;
     var v = e.target.value.trim(); if (!v) return;
@@ -1951,6 +1977,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   document.addEventListener("keydown", function(e){
     if (document.body.classList.contains("locked") || document.querySelector("dialog[open]") || isTyping() || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === "/") { e.preventDefault(); $("q").focus(); return; }
+    if ((e.key === "n" || e.key === "N") && on("notes")) { e.preventDefault(); openNotes(); return; }
     if (on("keys") && on("quick") && /^[1-9]$/.test(e.key)) {
       var l = data.quick[+e.key - 1]; if (!l) return;
       if (isVault(l)) { openVault(l); return; }
