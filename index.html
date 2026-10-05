@@ -367,6 +367,83 @@ dialog.app iframe{flex:1;border:0;width:100%;background:#fff}
 .qt .lockmark{position:absolute;top:6px;right:8px;font-size:.7rem;opacity:.6}
 .vfiles{font-size:.82rem;color:var(--muted);margin:-6px 0 10px}
 
+/* Gruppen-Board */
+.gctl{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.gctl .inp{width:auto;height:34px}
+#gN{width:58px}
+#gList{max-width:160px;margin-right:auto}
+.gsep{flex:1}
+.gboard{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;align-items:start}
+.gcol{border:1px solid var(--line);border-radius:12px;padding:8px 8px 10px;min-height:96px;background:var(--card);transition:border-color .12s,background .12s}
+.gcol.pool{background:var(--bg);border-style:dashed}
+.gcol.over,.gcol.tgt{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--card))}
+.gcol .gh{display:flex;align-items:center;gap:4px;margin-bottom:6px}
+.gcol .gh b{flex:1;font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:text}
+.gcol .gh small{color:var(--muted);font-size:.74rem}
+.gcol .gh .ib{min-width:22px;height:22px;font-size:.75rem}
+.gm{display:flex;flex-wrap:wrap;gap:5px}
+.cn{display:inline-block;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:.92rem;cursor:grab;user-select:none;touch-action:manipulation}
+.gboard .cn.sel{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.cn.drag{opacity:.4}
+.gadd{border:1px dashed var(--line);border-radius:12px;background:none;min-height:46px;align-self:stretch;color:var(--muted);cursor:pointer}
+.gadd:hover{background:var(--hover);color:var(--ink)}
+dialog.big:fullscreen .gboard{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+dialog.big:fullscreen .cn{font-size:1.25rem;padding:6px 14px}
+dialog.big:fullscreen .gcol .gh b{font-size:1rem}
+
+/* Anwesenheit */
+.att{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:2px 16px;max-height:52vh;overflow:auto}
+.att li{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:8px}
+.att li:hover{background:var(--hover)}
+.att li span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.sg button{border:0;background:none;width:32px;height:28px;cursor:pointer;color:var(--muted);font-size:.85rem}
+.sg button+button{border-left:1px solid var(--line)}
+.sg button.on[data-s="a"]{background:#2b8a3e;color:#fff}
+.sg button.on[data-s="v"]{background:#d08a12;color:#fff}
+.sg button.on[data-s="f"]{background:#c0392b;color:#fff}
+.sg button.on[data-s="e"]{background:#64748b;color:#fff}
+.asum{margin-top:10px;font-size:.88rem;color:var(--muted)}
+.asum b{color:var(--ink)}
+.aover{overflow:auto;max-height:56vh}
+.aover table{border-collapse:collapse;font-size:.84rem;width:100%}
+.aover th,.aover td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+.aover th:first-child,.aover td:first-child{text-align:left;position:sticky;left:0;background:var(--card)}
+.aover th{color:var(--muted);font-weight:600;font-size:.76rem}
+.aover .s-a{color:#2b8a3e}.aover .s-v{color:#d08a12}.aover .s-f{color:#c0392b;font-weight:700}.aover .s-e{color:#64748b}
+
+/* Karten */
+.kcard{min-height:170px;display:grid;place-items:center;text-align:center;border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:10px;background:var(--bg)}
+.kcard b{display:block;font-size:clamp(1.5rem,4.5vw,2.4rem);font-weight:600;line-height:1.2}
+.kcard small{display:block;color:var(--muted);font-size:1.02rem;margin-top:8px}
+.kcard.small{min-height:0;padding:10px}
+.kcard.small b{font-size:1.1rem}
+.kcard.small small{font-size:.85rem;margin-top:2px}
+.kcard.flip{animation:flip .35s ease}
+@keyframes flip{0%{transform:rotateX(80deg);opacity:0}100%{transform:none;opacity:1}}
+dialog.big:fullscreen .kcard{flex:1;min-height:50vh}
+dialog.big:fullscreen .kcard b{font-size:clamp(2.4rem,7vw,5rem)}
+.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.grp{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.grp b{display:block;font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.grp div{font-size:.95rem;line-height:1.6}
+.grp div i{font-style:normal;color:var(--muted);font-size:.85rem}
+
+/* Ampel */
+.amp{display:flex;gap:28px;align-items:center;justify-content:center;flex-wrap:wrap;padding:6px 0}
+.lights{display:flex;flex-direction:column;gap:12px;background:#1d1f24;padding:14px;border-radius:26px}
+.lights i{width:78px;height:78px;border-radius:50%;opacity:.16;transition:opacity .2s,box-shadow .2s}
+.lights .r{background:#ef4444}.lights .y{background:#f5b301}.lights .g{background:#22c55e}
+.lights i.on{opacity:1;box-shadow:0 0 28px currentColor}
+.lights .r.on{color:#ef4444}.lights .y.on{color:#f5b301}.lights .g.on{color:#22c55e}
+.ampside{flex:1;min-width:240px;max-width:380px}
+.meter{position:relative;height:16px;border-radius:9px;background:var(--hover);overflow:hidden}
+.meter .lvl{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent);transition:width .08s linear}
+.meter .mk{position:absolute;top:0;bottom:0;width:2px}
+.meter .mk.y{background:#f5b301}.meter .mk.r{background:#ef4444}
+dialog.big:fullscreen .amp{flex:1}
+dialog.big:fullscreen .lights i{width:min(22vh,180px);height:min(22vh,180px)}
+
 /* Sperre */
 #lock{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:16px;background:var(--bg)}
 body.locked #lock{display:grid}
@@ -420,6 +497,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     <div class="tools">
       <button class="ib nbtn" id="notesBtn" type="button" title="Notizen &amp; To-dos (N)">☑<span class="nb" id="nBadge"></span></button>
       <button class="ib" id="calcBtn" type="button" title="Taschenrechner">÷</button>
+      <button class="ib" id="grpBtn" type="button" title="Gruppen bilden"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c.6-3.2 3-5 6-5s5.4 1.8 6 5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.2 14.1c2.5.2 4.3 1.9 4.8 4.9"/></svg></button>
       <button class="ib" id="toolsBtn" type="button" title="Werkzeuge: Timer, Zufall, Gruppen">⏱</button>
       <button class="ib hide" id="lockBtn" type="button" title="Sperren">🔒</button>
       <button class="ib" id="editBtn" type="button" title="Links bearbeiten">✎</button>
@@ -608,7 +686,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
 <dialog id="toolDlg" class="big">
   <div class="dlg">
     <div class="bighead">
-      <div class="tabs" id="toolTabs"><button class="ib" type="button" data-t="calc">Rechner</button><button class="ib" type="button" data-t="qrg">QR</button><button class="ib" type="button" data-t="date">Datum</button><button class="ib cur" type="button" data-t="timer">Timer</button><button class="ib" type="button" data-t="rand">Zufall</button><button class="ib" type="button" data-t="grp">Gruppen</button><button class="ib" type="button" data-t="names">Namen</button></div>
+      <div class="tabs" id="toolTabs"><button class="ib" type="button" data-t="calc">Rechner</button><button class="ib" type="button" data-t="qrg">QR</button><button class="ib" type="button" data-t="date">Datum</button><button class="ib cur" type="button" data-t="timer">Timer</button><button class="ib" type="button" data-t="rand">Zufall</button><button class="ib" type="button" data-t="grp">Gruppen</button><button class="ib" type="button" data-t="att">Anwesenheit</button><button class="ib" type="button" data-t="cards">Karten</button><button class="ib" type="button" data-t="amp">Ampel</button><button class="ib" type="button" data-t="names">Namen</button></div>
       <button class="ib" type="button" id="fsBtn" title="Vollbild">⛶</button>
       <button class="ib" type="button" data-close title="Schließen">✕</button>
     </div>
@@ -675,14 +753,64 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       <div class="muted" id="rInfo" style="text-align:center"></div>
     </div>
     <div class="pane hide" id="p-grp">
-      <div class="ctrl" style="align-items:center">
-        <input class="inp" id="gN" type="number" min="1" max="30" value="3" style="width:76px">
-        <select class="inp" id="gMode" style="width:auto"><option value="groups">Gruppen</option><option value="size">Personen je Gruppe</option></select>
-        <button class="btn primary" type="button" id="gGo">Einteilen</button>
+      <div class="gctl">
+        <select class="inp" id="gList" title="Kursliste"></select>
+                <input class="inp" id="gN" type="number" min="1" max="30" value="4" title="Anzahl">
+        <select class="inp" id="gMode"><option value="groups">Gruppen</option><option value="size">pro Gruppe</option></select>
+        <button class="btn primary" type="button" id="gGo" title="Alle Namen zufällig neu verteilen">Zufällig</button>
+        <button class="btn" type="button" id="gEmpty" title="Leere Gruppen anlegen und selbst einteilen">Leer</button>
+        <button class="btn ghost" type="button" id="gRest" title="Nicht eingeteilte zufällig auf die Gruppen verteilen">Rest verteilen</button>
+        <button class="btn ghost" type="button" id="gBack" title="Alle zurück in „Nicht eingeteilt“">Alle zurück</button>
       </div>
-      <div class="groups" id="gOut"></div>
+      <div class="gboard" id="gBoard"></div>
+      <div class="muted" style="font-size:.8rem;padding:6px 2px 0">Namen ziehen und ablegen – oder antippen und dann die Gruppe antippen. Gruppenname anklicken zum Umbenennen.</div>
+    </div>
+    <div class="pane hide" id="p-att">
+      <div class="gctl">
+        <select class="inp" id="aList" title="Kursliste"></select>
+        <input class="inp" type="date" id="aDate" style="width:auto">
+        <span style="flex:1"></span>
+        <button class="btn" type="button" id="aAll">Alle da</button>
+        <button class="btn ghost" type="button" id="aView">Übersicht</button>
+        <button class="btn ghost" type="button" id="aCsv" title="Alle Tage als CSV (Excel)">CSV</button>
+      </div>
+      <div id="aDay"><ul class="att" id="aRows"></ul><div class="asum" id="aSum"></div></div>
+      <div id="aOver" class="hide"><div class="aover" id="aTable"></div></div>
+    </div>
+    <div class="pane hide" id="p-cards">
+      <div class="gctl">
+        <select class="inp" id="kSet" title="Kartensatz"></select>
+        <span style="flex:1"></span>
+        <button class="btn primary" type="button" id="kDraw">Karte ziehen</button>
+        <button class="btn" type="button" id="kRoles" title="Rollen an die Mitglieder deiner Gruppen verteilen">Rollen → Gruppen</button>
+        <button class="btn ghost" type="button" id="kEdit">Bearbeiten</button>
+      </div>
+      <div class="kcard" id="kOut"><span class="muted">Karte ziehen …</span></div>
+      <div class="groups" id="kRoleOut"></div>
+      <div id="kEditBox" class="hide">
+        <div class="gctl"><input class="inp" id="kName" type="text" maxlength="40" placeholder="Name des Satzes" style="flex:1"><button class="btn" type="button" id="kNew">＋ Satz</button><button class="btn ghost" type="button" id="kDel" style="color:var(--danger)">Löschen</button></div>
+        <label class="fld"><span>Eine Karte pro Zeile · optional „Titel – Beschreibung“</span><textarea id="kItems" style="width:100%;min-height:200px;border:1px solid var(--line);border-radius:9px;background:var(--bg);padding:8px 10px"></textarea></label>
+      </div>
+    </div>
+    <div class="pane hide" id="p-amp">
+      <div class="amp">
+        <div class="lights" id="ampL"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+        <div class="ampside">
+          <div class="meter"><div class="lvl" id="ampLvl"></div><div class="mk y" id="ampMy"></div><div class="mk r" id="ampMr"></div></div>
+          <label class="fld" style="margin-top:14px"><span>Grenze für Gelb – rechts = mehr Lärm erlaubt</span><input type="range" id="ampTh" min="20" max="85" value="55" style="width:100%;accent-color:var(--accent)"></label>
+          <label class="chk"><input type="checkbox" id="ampBeep"> Leiser Hinweiston bei Rot</label>
+          <div class="ctrl" style="justify-content:flex-start"><button class="btn primary" type="button" id="ampGo">Mikrofon starten</button></div>
+          <div class="muted" id="ampMsg" style="padding:8px 0 0;font-size:.82rem">Der Ton wird nur gemessen, nicht aufgenommen oder gespeichert.</div>
+        </div>
+      </div>
     </div>
     <div class="pane hide" id="p-names">
+      <div class="gctl">
+        <select class="inp" id="nList" title="Kursliste"></select>
+        <input class="inp" id="nName" type="text" maxlength="40" placeholder="Name der Liste" style="flex:1;min-width:120px">
+        <button class="btn" type="button" id="nAdd">＋ Liste</button>
+        <button class="btn ghost" type="button" id="nDel" style="color:var(--danger)">Löschen</button>
+      </div>
       <label class="fld"><span>Ein Name pro Zeile – gilt für Zufall und Gruppen</span><textarea id="names" style="width:100%;min-height:240px;border:1px solid var(--line);border-radius:9px;background:var(--bg);padding:8px 10px"></textarea></label>
     </div>
   </div>
@@ -795,6 +923,12 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       ]
     };
   }
+  function defaultCards(){
+    return [
+      {id:uid(), name:"Rollen", items:["Moderation – achtet darauf, dass alle sprechen","Zeitwächter:in – achtet auf die Zeit","Schreiber:in – notiert die Ergebnisse","Präsentation – stellt die Ergebnisse vor","Sprach-Coach – achtet darauf, dass Deutsch gesprochen wird","Material – holt und ordnet das Material"].join("\n")},
+      {id:uid(), name:"Gesprächsimpulse", items:["Was hast du am Wochenende gemacht?","Beschreibe dein Lieblingsessen.","Was machst du gern in deiner Freizeit?","Erzähl von deiner Heimatstadt.","Welchen Beruf möchtest du später haben? Warum?","Was war dein schönster Tag in diesem Jahr?","Welche App benutzt du am meisten – und wofür?","Was gefällt dir in Deutschland, was nicht?","Beschreibe deine Wohnung oder dein Zimmer.","Wohin möchtest du gern reisen?","Was machst du, wenn du Stress hast?","Erzähl von einer Person, die dir wichtig ist."].join("\n")}
+    ];
+  }
   function valid(d){ return d && typeof d === "object" && Array.isArray(d.sections) && d.sections.every(function(s){ return s && typeof s.name === "string" && Array.isArray(s.links); }); }
   function normLink(l){ l.id = l.id || uid(); l.kind = KINDS[l.kind] ? l.kind : "sonst"; l.note = l.note || ""; l.icon = l.icon || ""; l.newTab = !!l.newTab; l.title = l.title || l.url || "Ohne Titel"; }
   function normalize(d){
@@ -814,7 +948,14 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     d.notes.text = d.notes.text || "";
     if (!Array.isArray(d.notes.todos)) d.notes.todos = [];
     if (!d.tools || typeof d.tools !== "object") d.tools = {};
-    d.tools.names = d.tools.names || "";
+    if (!Array.isArray(d.tools.lists) || !d.tools.lists.length) d.tools.lists = [{id:uid(), name:"Kurs 1", names:d.tools.names || ""}];
+    d.tools.lists.forEach(function(l){ l.id = l.id || uid(); l.name = l.name || "Liste"; l.names = l.names || ""; });
+    if (!d.tools.lists.some(function(l){ return l.id === d.tools.cur; })) d.tools.cur = d.tools.lists[0].id;
+    if (!d.tools.boards || typeof d.tools.boards !== "object") d.tools.boards = {};
+    delete d.tools.names;
+    if (!d.tools.att || typeof d.tools.att !== "object") d.tools.att = {};
+    if (!Array.isArray(d.tools.cards) || !d.tools.cards.length) d.tools.cards = defaultCards();
+    if (!d.tools.cardCur || !d.tools.cards.some(function(c){ return c.id === d.tools.cardCur; })) d.tools.cardCur = d.tools.cards[0].id;
     if (!d.view || typeof d.view !== "object") d.view = {};
     VIEW.forEach(function(v){ if (typeof d.view[v[0]] !== "boolean") d.view[v[0]] = v[0] !== "analog"; });
     d.sections.forEach(function(s){ s.id = s.id || uid(); s.icon = s.icon || "📁"; s.color = /^#[0-9a-f]{6}$/i.test(s.color || "") ? s.color : "#2f4fd1"; s.links.forEach(normLink); });
@@ -1506,6 +1647,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     $("editNotice").hidden = !editMode;
     $("lockBtn").classList.toggle("hide", !hasPw());
     $("toolsBtn").classList.toggle("hide", !on("tools"));
+    $("grpBtn").classList.toggle("hide", !on("tools"));
     $("calcBtn").classList.toggle("hide", !on("calc"));
     $("pwMenu").textContent = hasPw() ? "Passwort ändern" : "Passwort festlegen";
     $("pwOffMenu").classList.toggle("hide", !hasPw());
@@ -1794,7 +1936,8 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   });
   $("tReset").addEventListener("click", function(){ tSet(tTotal); });
 
-  function names(){ return data.tools.names.split(/\r?\n/).map(function(s){ return s.trim(); }).filter(Boolean); }
+  function curList(){ return data.tools.lists.filter(function(l){ return l.id === data.tools.cur; })[0] || data.tools.lists[0]; }
+  function names(){ var seen = {}; return curList().names.split(/\r?\n/).map(function(s){ return s.trim(); }).filter(function(x){ if (!x || seen[x]) return false; seen[x] = 1; return true; }); }
   var drawnSet = [];
   function rInfo(){ var n = names(); $("rInfo").textContent = n.length ? ($("rNoRep").checked ? (n.length - drawnSet.length) + " von " + n.length + " übrig" : n.length + " Namen") : "Erst unter „Namen“ eintragen."; }
   $("rGo").addEventListener("click", function(){
@@ -1809,30 +1952,261 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   });
   $("rReset").addEventListener("click", function(){ drawnSet = []; $("rOut").textContent = "–"; rInfo(); });
   $("rNoRep").addEventListener("change", rInfo);
-  $("gGo").addEventListener("click", function(){
-    var n = names().slice(), k = Math.max(1, parseInt($("gN").value, 10) || 1);
-    if (!n.length) { $("gOut").innerHTML = '<div class="muted">Erst unter „Namen“ eintragen.</div>'; return; }
-    for (var i = n.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = n[i]; n[i] = n[j]; n[j] = t; }
-    var g = $("gMode").value === "size" ? Math.max(1, Math.ceil(n.length / k)) : Math.min(k, n.length), out = [];
-    for (var a = 0; a < g; a++) out.push([]);
-    n.forEach(function(x, i){ out[i % g].push(x); });
-    $("gOut").innerHTML = out.map(function(grp, i){ return '<div class="grp"><b>Gruppe ' + (i + 1) + '</b><div>' + grp.map(esc).join("<br>") + '</div></div>'; }).join("");
+  /* ---- Kurslisten ---- */
+  function listOpts(){ return data.tools.lists.map(function(l){ return '<option value="' + esc(l.id) + '"' + (l.id === data.tools.cur ? ' selected' : '') + '>' + esc(l.name) + '</option>'; }).join(""); }
+  function syncLists(){
+    $("gList").innerHTML = listOpts(); $("nList").innerHTML = listOpts(); $("aList").innerHTML = listOpts();
+    $("nName").value = curList().name; $("names").value = curList().names;
+    $("nDel").classList.toggle("hide", data.tools.lists.length < 2);
+  }
+  function setList(id){ data.tools.cur = id; save(); drawnSet = []; syncLists(); renderBoard(); rInfo(); }
+  $("gList").addEventListener("change", function(e){ setList(e.target.value); });
+  $("nList").addEventListener("change", function(e){ setList(e.target.value); });
+  $("aList").addEventListener("change", function(e){ setList(e.target.value); renderAtt(); });
+  $("nName").addEventListener("input", function(e){ curList().name = e.target.value.trim() || "Liste"; save(); $("gList").innerHTML = listOpts(); var o = $("nList").selectedIndex; $("nList").innerHTML = listOpts(); $("nList").selectedIndex = o; });
+  $("nAdd").addEventListener("click", function(){
+    var l = {id:uid(), name:"Kurs " + (data.tools.lists.length + 1), names:""};
+    data.tools.lists.push(l); setList(l.id); $("nName").focus(); $("nName").select();
+  });
+  $("nDel").addEventListener("click", function(){
+    if (data.tools.lists.length < 2) return;
+    var l = curList(); if (!confirm("Liste „" + l.name + "“ löschen?")) return;
+    data.tools.lists = data.tools.lists.filter(function(x){ return x !== l; }); delete data.tools.boards[l.id];
+    setList(data.tools.lists[0].id);
   });
   var namesT = null;
-  $("names").addEventListener("input", function(e){ clearTimeout(namesT); var v = e.target.value; namesT = setTimeout(function(){ data.tools.names = v; save(); drawnSet = []; }, 400); });
+  $("names").addEventListener("input", function(e){ clearTimeout(namesT); var v = e.target.value, l = curList(); namesT = setTimeout(function(){ l.names = v; save(); drawnSet = []; }, 400); });
+
+  /* ---- Gruppen-Board ---- */
+  var gSel = null;
+  function board(){
+    var b = data.tools.boards[data.tools.cur];
+    if (!b) b = data.tools.boards[data.tools.cur] = {groups:[]};
+    var n = names(), seen = {};
+    b.groups.forEach(function(g){ g.m = (g.m || []).filter(function(x){ if (n.indexOf(x) === -1 || seen[x]) return false; seen[x] = 1; return true; }); });
+    return b;
+  }
+  function pool(b){ var inG = {}; b.groups.forEach(function(g){ g.m.forEach(function(x){ inG[x] = 1; }); }); return names().filter(function(x){ return !inG[x]; }); }
+  function chip(x){ return '<span class="cn' + (gSel === x ? ' sel' : '') + '" draggable="true" data-n="' + esc(x) + '">' + esc(x) + '</span>'; }
+  function renderBoard(){
+    var b = board(), p = pool(b);
+    if (!names().length) { $("gBoard").innerHTML = '<div class="muted">Erst unter „Namen“ eine Liste anlegen.</div>'; return; }
+    var h = '<div class="gcol pool" data-g="pool"><div class="gh"><b>Nicht eingeteilt</b><small>' + p.length + '</small></div><div class="gm">' + p.map(chip).join("") + '</div></div>';
+    b.groups.forEach(function(g, i){
+      h += '<div class="gcol" data-g="' + i + '"><div class="gh"><b data-ren="' + i + '" title="Umbenennen">' + esc(g.name) + '</b><small>' + g.m.length + '</small><button class="ib" type="button" data-gdel="' + i + '" title="Gruppe entfernen">✕</button></div><div class="gm">' + g.m.map(chip).join("") + '</div></div>';
+    });
+    h += '<button class="gadd" type="button" id="gAdd">＋ Gruppe</button>';
+    $("gBoard").innerHTML = h;
+  }
+  function moveTo(name, target){
+    var b = board();
+    b.groups.forEach(function(g){ g.m = g.m.filter(function(x){ return x !== name; }); });
+    if (target !== "pool") b.groups[+target].m.push(name);
+    gSel = null; save(); renderBoard();
+  }
+  function shuffle(a){ for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function groupCount(total){ var k = Math.max(1, parseInt($("gN").value, 10) || 1); return $("gMode").value === "size" ? Math.max(1, Math.ceil(total / k)) : Math.min(k, Math.max(total, 1)); }
+  function makeGroups(k){ var g = []; for (var i = 0; i < k; i++) g.push({id:uid(), name:"Gruppe " + (i + 1), m:[]}); return g; }
+  $("gGo").addEventListener("click", function(){
+    var n = shuffle(names().slice()); if (!n.length) { renderBoard(); return; }
+    var b = board(), k = groupCount(n.length); b.groups = makeGroups(k);
+    n.forEach(function(x, i){ b.groups[i % k].m.push(x); }); gSel = null; save(); renderBoard();
+  });
+  $("gEmpty").addEventListener("click", function(){
+    var n = names(); var b = board(); b.groups = makeGroups(groupCount(n.length)); gSel = null; save(); renderBoard();
+  });
+  $("gRest").addEventListener("click", function(){
+    var b = board(), p = shuffle(pool(b));
+    if (!b.groups.length) b.groups = makeGroups(groupCount(names().length));
+    p.forEach(function(x){ var g = b.groups.slice().sort(function(a, c){ return a.m.length - c.m.length; })[0]; g.m.push(x); });
+    gSel = null; save(); renderBoard();
+  });
+  $("gBack").addEventListener("click", function(){ var b = board(); b.groups.forEach(function(g){ g.m = []; }); gSel = null; save(); renderBoard(); });
+  $("gBoard").addEventListener("click", function(e){
+    if (e.target.id === "gAdd") { var b = board(); b.groups.push({id:uid(), name:"Gruppe " + (b.groups.length + 1), m:[]}); save(); renderBoard(); return; }
+    var del = e.target.closest("[data-gdel]");
+    if (del) { var b2 = board(); b2.groups.splice(+del.dataset.gdel, 1); save(); renderBoard(); return; }
+    var ren = e.target.closest("[data-ren]");
+    if (ren && !gSel) { var g = board().groups[+ren.dataset.ren], v = prompt("Name der Gruppe:", g.name); if (v && v.trim()) { g.name = v.trim(); save(); renderBoard(); } return; }
+    var c = e.target.closest(".cn");
+    if (c) {
+      var col0 = c.closest(".gcol"), selEl = gSel && $("gBoard").querySelector('.cn.sel'), selCol = selEl && selEl.closest(".gcol");
+      if (gSel && selCol && col0 !== selCol) { moveTo(gSel, col0.dataset.g); return; }
+      gSel = gSel === c.dataset.n ? null : c.dataset.n; renderBoard(); return;
+    }
+    var col = e.target.closest(".gcol");
+    if (col && gSel) moveTo(gSel, col.dataset.g);
+  });
+  $("gBoard").addEventListener("dragstart", function(e){
+    var c = e.target.closest && e.target.closest(".cn"); if (!c) return;
+    e.dataTransfer.setData("text/plain", c.dataset.n); e.dataTransfer.effectAllowed = "move"; c.classList.add("drag");
+  });
+  $("gBoard").addEventListener("dragend", function(e){ var c = e.target.closest && e.target.closest(".cn"); if (c) c.classList.remove("drag"); });
+  $("gBoard").addEventListener("dragover", function(e){
+    var col = e.target.closest(".gcol"); if (!col) return; e.preventDefault();
+    [].forEach.call($("gBoard").querySelectorAll(".over"), function(x){ if (x !== col) x.classList.remove("over"); }); col.classList.add("over");
+  });
+  $("gBoard").addEventListener("dragleave", function(e){ var col = e.target.closest(".gcol"); if (col && !col.contains(e.relatedTarget)) col.classList.remove("over"); });
+  $("gBoard").addEventListener("drop", function(e){
+    var col = e.target.closest(".gcol"); if (!col) return; e.preventDefault();
+    var n = e.dataTransfer.getData("text/plain"); if (n) moveTo(n, col.dataset.g);
+  });
+  /* ---- Anwesenheit ---- */
+  var ATT = {a:"da", v:"verspätet", f:"fehlt", e:"entschuldigt"}, ATT_I = {a:"✓", v:"⏱", f:"✕", e:"E"};
+  function attStore(){ var id = data.tools.cur; return data.tools.att[id] || (data.tools.att[id] = {}); }
+  function renderAtt(){
+    var n = names(), date = $("aDate").value || todayStr(), day = attStore()[date] || {};
+    if (!n.length) { $("aRows").innerHTML = '<li class="muted">Erst unter „Namen“ eine Liste anlegen.</li>'; $("aSum").textContent = ""; return; }
+    $("aRows").innerHTML = n.map(function(x){
+      return '<li><span>' + esc(x) + '</span><div class="sg" data-n="' + esc(x) + '">' + ["a","v","f","e"].map(function(k){
+        return '<button type="button" data-s="' + k + '" class="' + (day[x] === k ? 'on' : '') + '" title="' + ATT[k] + '">' + ATT_I[k] + '</button>'; }).join("") + '</div></li>';
+    }).join("");
+    var c = {a:0, v:0, f:0, e:0, o:0}; n.forEach(function(x){ c[day[x] || "o"]++; });
+    $("aSum").innerHTML = '<b>' + c.a + '</b> da · <b>' + c.v + '</b> verspätet · <b>' + c.f + '</b> fehlen · <b>' + c.e + '</b> entschuldigt' + (c.o ? ' · ' + c.o + ' offen' : '');
+    if (!$("aOver").classList.contains("hide")) renderAttTable();
+  }
+  function attDates(){ var st = attStore(); return Object.keys(st).filter(function(d){ return Object.keys(st[d]).length; }).sort(); }
+  function renderAttTable(){
+    var st = attStore(), dates = attDates(), n = names();
+    if (!dates.length) { $("aTable").innerHTML = '<div class="muted">Noch keine Einträge.</div>'; return; }
+    var h = '<table><tr><th>Name</th>' + dates.map(function(d){ var p = d.split("-"); return '<th>' + (+p[2]) + '.' + (+p[1]) + '.</th>'; }).join("") + '<th title="unentschuldigt">Fehlt</th><th title="da + verspätet">Anwesend</th></tr>';
+    n.forEach(function(x){
+      var f = 0, cnt = 0, pres = 0;
+      h += '<tr><td>' + esc(x) + '</td>' + dates.map(function(d){ var v = st[d][x]; if (v) cnt++; if (v === "f") f++; if (v === "a" || v === "v") pres++; return '<td class="s-' + (v || "") + '">' + (v ? ATT_I[v] : '·') + '</td>'; }).join("") +
+        '<td class="' + (f ? 's-f' : '') + '">' + f + '</td><td>' + (cnt ? Math.round(pres / cnt * 100) + ' %' : '–') + '</td></tr>';
+    });
+    $("aTable").innerHTML = h + '</table>';
+  }
+  $("aRows").addEventListener("click", function(e){
+    var b = e.target.closest("[data-s]"); if (!b) return;
+    var who = b.parentNode.dataset.n, date = $("aDate").value || todayStr(), st = attStore(), day = st[date] || (st[date] = {});
+    if (day[who] === b.dataset.s) delete day[who]; else day[who] = b.dataset.s;
+    if (!Object.keys(day).length) delete st[date];
+    save(); renderAtt();
+  });
+  $("aDate").addEventListener("change", renderAtt);
+  $("aAll").addEventListener("click", function(){
+    var date = $("aDate").value || todayStr(), st = attStore(), day = st[date] || (st[date] = {});
+    names().forEach(function(x){ if (!day[x]) day[x] = "a"; }); save(); renderAtt();
+  });
+  $("aView").addEventListener("click", function(){
+    var show = $("aOver").classList.contains("hide");
+    $("aOver").classList.toggle("hide", !show); $("aDay").classList.toggle("hide", show);
+    $("aView").textContent = show ? "Tag" : "Übersicht"; if (show) renderAttTable();
+  });
+  $("aCsv").addEventListener("click", function(){
+    var st = attStore(), dates = attDates(), n = names();
+    var q = function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; };
+    var rows = [["Name"].concat(dates.map(function(d){ var p = d.split("-"); return p[2] + "." + p[1] + "." + p[0]; }), ["Fehlt (unentschuldigt)", "Entschuldigt", "Verspätet", "Anwesenheit %"])];
+    n.forEach(function(x){
+      var f = 0, v = 0, e = 0, a = 0, c = 0;
+      rows.push([x].concat(dates.map(function(d){ var s = st[d][x]; if (s) c++; if (s === "f") f++; if (s === "v") v++; if (s === "e") e++; if (s === "a") a++; return s ? ATT[s] : ""; }), [f, e, v, c ? Math.round((a + v) / c * 100) : ""]));
+    });
+    dl("\ufeff" + rows.map(function(r){ return r.map(q).join(";"); }).join("\r\n"), "text/csv;charset=utf-8", "anwesenheit-" + safeName(curList().name) + ".csv");
+  });
+
+  /* ---- Karten ---- */
+  function curSet(){ return data.tools.cards.filter(function(c){ return c.id === data.tools.cardCur; })[0] || data.tools.cards[0]; }
+  function cardItems(){ return curSet().items.split(/\r?\n/).map(function(x){ return x.trim(); }).filter(Boolean); }
+  function cardParts(x){ var i = x.indexOf(" – "); if (i < 0) i = x.indexOf(" - "); return i > 0 ? [x.slice(0, i), x.slice(i + 3)] : [x, ""]; }
+  function renderCardSets(){
+    $("kSet").innerHTML = data.tools.cards.map(function(c){ return '<option value="' + esc(c.id) + '"' + (c.id === data.tools.cardCur ? ' selected' : '') + '>' + esc(c.name) + '</option>'; }).join("");
+    $("kName").value = curSet().name; $("kItems").value = curSet().items;
+    $("kDel").classList.toggle("hide", data.tools.cards.length < 2);
+  }
+  var kLast = -1;
+  $("kDraw").addEventListener("click", function(){
+    var it = cardItems(); $("kRoleOut").innerHTML = "";
+    if (!it.length) { $("kOut").innerHTML = '<span class="muted">Dieser Satz ist leer.</span>'; return; }
+    var i; do { i = Math.floor(Math.random() * it.length); } while (it.length > 1 && i === kLast); kLast = i;
+    var p = cardParts(it[i]), o = $("kOut"); o.classList.remove("small");
+    o.classList.remove("flip"); void o.offsetWidth; o.classList.add("flip");
+    o.innerHTML = '<div><b>' + esc(p[0]) + '</b>' + (p[1] ? '<small>' + esc(p[1]) + '</small>' : '') + '</div>';
+  });
+  $("kRoles").addEventListener("click", function(){
+    var roles = cardItems().map(function(x){ return cardParts(x)[0]; }), b = board();
+    var groups = b.groups.filter(function(g){ return g.m.length; });
+    if (!groups.length) { $("kRoleOut").innerHTML = '<div class="muted">Erst unter „Gruppen“ Gruppen bilden.</div>'; return; }
+    $("kOut").classList.add("small"); $("kOut").innerHTML = '<div><b>' + esc(curSet().name) + '</b><small>für ' + groups.length + ' Gruppen verteilt – nochmal klicken für neue Verteilung</small></div>';
+    $("kRoleOut").innerHTML = groups.map(function(g){
+      var r = shuffle(roles.slice()), m = shuffle(g.m.slice());
+      return '<div class="grp"><b>' + esc(g.name) + '</b><div>' + m.map(function(x, i){ return esc(x) + (r[i] ? ' <i>· ' + esc(r[i]) + '</i>' : ''); }).join("<br>") + '</div></div>';
+    }).join("");
+  });
+  $("kSet").addEventListener("change", function(e){ data.tools.cardCur = e.target.value; save(); kLast = -1; renderCardSets(); $("kOut").innerHTML = '<span class="muted">Karte ziehen …</span>'; $("kRoleOut").innerHTML = ""; });
+  $("kEdit").addEventListener("click", function(){ var hid = $("kEditBox").classList.toggle("hide"); $("kEdit").textContent = hid ? "Bearbeiten" : "Fertig"; });
+  var kT = null;
+  $("kItems").addEventListener("input", function(e){ clearTimeout(kT); var v = e.target.value, c = curSet(); kT = setTimeout(function(){ c.items = v; save(); }, 400); });
+  $("kName").addEventListener("input", function(e){ curSet().name = e.target.value.trim() || "Satz"; save(); var i = $("kSet").selectedIndex; renderCardSets(); $("kSet").selectedIndex = i; });
+  $("kNew").addEventListener("click", function(){ var c = {id:uid(), name:"Neuer Satz", items:""}; data.tools.cards.push(c); data.tools.cardCur = c.id; save(); renderCardSets(); $("kName").focus(); $("kName").select(); });
+  $("kDel").addEventListener("click", function(){
+    if (data.tools.cards.length < 2) return; var c = curSet(); if (!confirm("Kartensatz „" + c.name + "“ löschen?")) return;
+    data.tools.cards = data.tools.cards.filter(function(x){ return x !== c; }); data.tools.cardCur = data.tools.cards[0].id; save(); renderCardSets();
+  });
+
+  /* ---- Lautstärke-Ampel ---- */
+  var amp = null;
+  function ampMarkers(){ var y = +$("ampTh").value; $("ampMy").style.left = y + "%"; $("ampMr").style.left = Math.min(98, y + 18) + "%"; }
+  ampMarkers();
+  $("ampTh").addEventListener("input", function(){ ampMarkers(); data.tools.ampTh = +this.value; save(); });
+  function ampStop(){
+    if (!amp) return;
+    cancelAnimationFrame(amp.raf); amp.stream.getTracks().forEach(function(t){ t.stop(); }); try { amp.ctx.close(); } catch(e){}
+    amp = null; $("ampGo").textContent = "Mikrofon starten"; $("ampLvl").style.width = "0";
+    [].forEach.call($("ampL").children, function(x){ x.classList.remove("on"); });
+  }
+  function ampBeep(ctx){
+    var o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 660; o.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(.0001, ctx.currentTime); g.gain.exponentialRampToValueAtTime(.12, ctx.currentTime + .03); g.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .4);
+    o.start(); o.stop(ctx.currentTime + .45);
+  }
+  $("ampGo").addEventListener("click", function(){
+    if (amp) { ampStop(); return; }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { $("ampMsg").textContent = "Dieser Browser erlaubt keinen Mikrofonzugriff."; return; }
+    navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false}}).then(function(stream){
+      var A = window.AudioContext || window.webkitAudioContext, ctx = new A(), src = ctx.createMediaStreamSource(stream), an = ctx.createAnalyser();
+      an.fftSize = 1024; src.connect(an);
+      var buf = new Float32Array(an.fftSize), lvl = 0, redSince = 0, lastBeep = 0;
+      amp = {stream:stream, ctx:ctx, raf:0};
+      $("ampGo").textContent = "Stopp"; $("ampMsg").textContent = "Läuft – der Ton wird nur gemessen, nicht gespeichert.";
+      (function loop(){
+        an.getFloatTimeDomainData(buf);
+        var sum = 0; for (var i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+        var db = 20 * Math.log10(Math.sqrt(sum / buf.length) + 1e-9), v = Math.max(0, Math.min(100, (db + 70) * 1.6));
+        lvl = lvl * 0.85 + v * 0.15;
+        var y = +$("ampTh").value, r = y + 18, st = lvl >= r ? "r" : lvl >= y ? "y" : "g";
+        $("ampLvl").style.width = lvl.toFixed(1) + "%";
+        $("ampLvl").style.background = st === "r" ? "#ef4444" : st === "y" ? "#f5b301" : "#22c55e";
+        [].forEach.call($("ampL").children, function(x){ x.classList.toggle("on", x.classList.contains(st)); });
+        var now = performance.now();
+        if (st === "r") { if (!redSince) redSince = now; if ($("ampBeep").checked && now - redSince > 1500 && now - lastBeep > 4000) { ampBeep(ctx); lastBeep = now; } } else redSince = 0;
+        if (amp) amp.raf = requestAnimationFrame(loop);
+      })();
+    }).catch(function(){ $("ampMsg").textContent = "Kein Mikrofonzugriff – bitte im Browser erlauben."; });
+  });
+
+  function openTools(tab){
+    syncLists(); rInfo(); if (data.tools.ampTh) { $("ampTh").value = data.tools.ampTh; ampMarkers(); } $("toolDlg").showModal();
+    if (tab) $("toolTabs").querySelector('[data-t="' + tab + '"]').click();
+  }
+  $("grpBtn").addEventListener("click", function(){ openTools("grp"); });
   $("toolTabs").addEventListener("click", function(e){
     var b = e.target.closest("[data-t]"); if (!b) return;
     [].forEach.call($("toolTabs").children, function(x){ x.classList.toggle("cur", x === b); });
-    ["calc","qrg","date","timer","rand","grp","names"].forEach(function(t){ $("p-" + t).classList.toggle("hide", t !== b.dataset.t); });
+    if (b.dataset.t !== "amp") ampStop();
+    ["calc","qrg","date","timer","rand","grp","att","cards","amp","names"].forEach(function(t){ $("p-" + t).classList.toggle("hide", t !== b.dataset.t); });
     if (b.dataset.t === "calc") setTimeout(function(){ $("cIn").focus(); }, 30);
     if (b.dataset.t === "qrg") { $("qgIn").focus(); }
     if (b.dataset.t === "date" && !$("dG").value) dToday();
-    if (b.dataset.t === "names") $("names").value = data.tools.names;
+    if (b.dataset.t === "names") syncLists();
+    if (b.dataset.t === "grp") { syncLists(); renderBoard(); }
+    if (b.dataset.t === "att") { syncLists(); if (!$("aDate").value) $("aDate").value = todayStr(); renderAtt(); }
+    if (b.dataset.t === "cards") renderCardSets();
     if (b.dataset.t === "rand") rInfo();
   });
-  $("toolsBtn").addEventListener("click", function(){ $("names").value = data.tools.names; rInfo(); $("toolDlg").showModal(); });
+  $("toolsBtn").addEventListener("click", function(){ openTools(); });
   $("fsBtn").addEventListener("click", function(){ fs($("toolDlg")); });
-  $("toolDlg").addEventListener("close", function(){ if (document.fullscreenElement) document.exitFullscreen(); });
+  $("toolDlg").addEventListener("close", function(){ ampStop(); if (document.fullscreenElement) document.exitFullscreen(); });
   $("qrDlg").addEventListener("close", function(){ if (document.fullscreenElement) document.exitFullscreen(); });
 
   /* ================= Link- & Ordner-Dialoge ================= */
