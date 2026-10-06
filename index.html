@@ -365,6 +365,8 @@ dialog.app[open]{display:flex;flex-direction:column}
 .apphead b{flex:1;font-size:.9rem;color:var(--muted);font-weight:600}
 dialog.app iframe{flex:1;border:0;width:100%;background:#fff}
 .qt .lockmark{position:absolute;top:6px;right:8px;font-size:.7rem;opacity:.6}
+.vpmiss{font-size:.86rem;color:var(--muted);margin:4px 0 10px}
+.vpmiss code{font-size:.8rem;overflow-wrap:anywhere;color:var(--ink)}
 .vfiles{font-size:.82rem;color:var(--muted);margin:-6px 0 10px}
 
 /* Gruppen-Board */
@@ -856,6 +858,10 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     <h2 id="vpT">Geschützt</h2>
     <label class="fld"><input type="password" name="pw" placeholder="Passwort" autocomplete="current-password"></label>
     <div class="err" id="vpErr"></div>
+    <div class="vpmiss hide" id="vpMiss">
+      <p style="margin:0 0 8px">Die Datei liegt nicht unter<br><code id="vpUrl"></code></p>
+      <label class="btn" style="display:inline-flex;align-items:center;cursor:pointer">.vault-Datei vom Gerät öffnen<input type="file" id="vpFile" accept=".vault,application/octet-stream,application/json,text/plain" hidden></label>
+    </div>
     <div class="acts"><button class="btn ghost" type="button" data-close>Abbrechen</button><button class="btn primary" type="submit">Öffnen</button></div>
   </form>
 </dialog>
@@ -1599,7 +1605,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   }
   function openVault(l){
     vaultCur = l;
-    $("vpT").textContent = "🔒 " + l.title; $("vpErr").textContent = ""; F($("vaultPwForm"), "pw").value = "";
+    $("vpT").textContent = "🔒 " + l.title; $("vpErr").textContent = ""; $("vpMiss").classList.add("hide"); F($("vaultPwForm"), "pw").value = "";
     $("vaultPw").showModal(); setTimeout(function(){ F($("vaultPwForm"), "pw").focus(); }, 30);
   }
   $("vaultPwForm").addEventListener("submit", function(e){
@@ -1607,7 +1613,10 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
     var f = e.target, pw = F(f, "pw").value, l = vaultCur; if (!pw || !l) return;
     $("vpErr").textContent = "Entschlüssele …";
     getVault(vaultFile(l)).then(function(pack){
-      if (!pack) { $("vpErr").textContent = "Datei „" + vaultFile(l) + "“ nicht gefunden."; return; }
+      if (!pack) {
+        $("vpErr").textContent = "„" + vaultFile(l) + "“ nicht gefunden.";
+        $("vpUrl").textContent = absUrl(vaultFile(l)); $("vpMiss").classList.remove("hide"); return;
+      }
       return decryptObj(pack, pw).then(function(obj){
         if (!obj || obj.app !== "zentrale-vault" || typeof obj.html !== "string") throw 0;
         $("vaultPw").close();
@@ -1618,6 +1627,17 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
         $("appDlg").showModal();
       }, function(){ $("vpErr").textContent = "Falsches Passwort."; f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake"); F(f, "pw").select(); });
     });
+  });
+  $("vpFile").addEventListener("change", function(e){
+    var f = e.target.files[0], l = vaultCur; if (!f || !l) return;
+    readFile(f).then(function(txt){
+      var pack = null; try { pack = JSON.parse(txt); } catch(err){}
+      if (!isEnc(pack)) { $("vpErr").textContent = "Das ist keine gültige .vault-Datei."; return; }
+      ls(VCACHE + vaultFile(l), txt);
+      $("vpMiss").classList.add("hide"); $("vpErr").textContent = "Datei geladen – jetzt Passwort eingeben.";
+      F($("vaultPwForm"), "pw").focus();
+    });
+    e.target.value = "";
   });
   function closeApp(){
     $("appFrame").srcdoc = ""; $("appFrame").removeAttribute("srcdoc"); $("appFrame").src = "about:blank";
