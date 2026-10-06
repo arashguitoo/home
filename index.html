@@ -2466,7 +2466,16 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
   setInterval(tick, 15000);
   setInterval(function(){ if (data && !document.body.classList.contains("locked")) loadWeather(); }, 30 * 60000);
   function isUnlocked(){ return ls(REMEMBER_KEY) === "1" || ss(SESSION_KEY) === "1"; }
-  function boot(){ purgeOld(); render(); loadWeather(); }
+  function boot(){ purgeOld(); render(); loadWeather(); autoVault(); }
+  function autoVault(){
+    if (!window.fetch || data.quick.some(function(l){ return isVault(l) && vaultFile(l) === "rechnung.vault"; }) || data.noAutoVault) return;
+    fetch("rechnung.vault?ts=" + Date.now(), {cache:"no-store"}).then(function(r){ return r.ok ? r.text() : null; }).then(function(t){
+      var p = null; try { p = JSON.parse(t); } catch(e){}
+      if (!isEnc(p) || data.quick.some(function(l){ return isVault(l) && vaultFile(l) === "rechnung.vault"; })) return;
+      data.quick.unshift({id:uid(), title:"Rechnungen", url:"vault:rechnung.vault", icon:"🧾", kind:"sonst", note:"", newTab:false});
+      data.noAutoVault = true; save(); render();
+    }).catch(function(){});
+  }
   (function start(){
     var local = loadLocal();
     if (local) {
