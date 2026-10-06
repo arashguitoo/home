@@ -517,6 +517,7 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
           <button type="button" data-act="server">Aus Repo laden</button>
           <hr>
           <button type="button" data-act="vault">Geschützte App einrichten</button>
+          <button type="button" data-act="vaultSave">Geschützte App: Datei sichern</button>
           <button type="button" data-act="pw" id="pwMenu">Passwort festlegen</button>
           <button type="button" data-act="pwOff" id="pwOffMenu" class="hide">Passwort entfernen</button>
           <button type="button" data-act="clearRecent">„Zuletzt“ leeren</button>
@@ -2409,6 +2410,12 @@ footer{margin-top:40px;text-align:center;font-size:.78rem;color:var(--muted)}
       case "view": openView(); break;
       case "theme": openThemes(); break;
       case "vault": openVaultSetup(); break;
+      case "vaultSave":
+        var keys = []; try { for (var vi = 0; vi < localStorage.length; vi++) { var kk = localStorage.key(vi); if (kk.indexOf(VCACHE) === 0) keys.push(kk); } } catch(e5){}
+        if (!keys.length) { alert("In diesem Browser ist keine verschlüsselte App gespeichert.\nBitte am Gerät öffnen, auf dem du die App eingerichtet hast – oder neu einrichten."); break; }
+        keys.forEach(function(kk){ dl(ls(kk), "application/octet-stream", kk.slice(VCACHE.length)); });
+        toast(keys.length + " Datei(en) gespeichert – jetzt ins Repo „home“ hochladen");
+        break;
       case "week": openWeek(); break;
       case "city": setCity(); break;
       case "title":
